@@ -1,4 +1,5 @@
 function Wizard(formId, statusSectionId) {
+
     var self = this;
 
     this.formId = formId;
@@ -107,11 +108,14 @@ Page.prototype.hide = function () {
 function WizardSteps(pages, container) {
 
     this.el = document.createElement('ul');
-    var self = this, li;
+    var self = this, li, a;
 
     pages.forEach(function (e, i) {
         li = document.createElement('li');
-        li.appendChild(document.createTextNode('Step ' + (i + 1)));
+        a = document.createElement('a');
+        a.setAttribute('href', '#');
+        a.appendChild(document.createTextNode('Step ' + (i + 1)));
+        li.appendChild(a);
         self.el.appendChild(li);
     });
     container.appendChild(self.el);
