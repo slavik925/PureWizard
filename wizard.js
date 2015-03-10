@@ -1,10 +1,14 @@
-function Wizard(formId) {
+function Wizard(formId, statusSectionId) {
     var self = this;
+
     this.formId = formId;
+    this.statusSectionId = statusSectionId || null;
     this.pages = [];
     this.current = null;
+
     var fieldsets = document.getElementById(this.formId).children,
         i, node;
+
     for (i = 0; i < fieldsets.length; i++) {
         node = fieldsets[i];
         if (node.tagName.toLowerCase() === 'fieldset') {
@@ -19,14 +23,31 @@ function Wizard(formId) {
             }
         }
     }
-    this.pages.forEach(function (p) {
+
+    var ul, li;
+
+    if (this.statusSectionId) {
+        this.statusSection = document.getElementById(this.statusSectionId);
+        ul = document.createElement('ul');
+    }
+
+    this.pages.forEach(function (p, i) {
         p.hide();
+        li = document.createElement('li');
+        li.appendChild(document.createTextNode('Step ' + (i + 1)));
+        ul.appendChild(li);
     });
+
+    if (this.statusSection) {
+        this.statusSection.appendChild(ul);
+    }
+
     if (this.pages.length > 0) {
         this.current = this.pages[0];
         this.current.show();
         this.toggleButtons();
     }
+
     document.getElementById('next').addEventListener('click', function () {
         Wizard.prototype.next.call(self);
     });
@@ -56,14 +77,14 @@ Wizard.prototype.toggleButtons = function () {
     var prev = document.getElementById('prev'),
         next = document.getElementById('next');
     if (!this.current.getPrev()) {
-        prev.className += ' hide';
+        prev.style.display = 'none';
     } else {
-        prev.className = prev.className.replace('hide', '');
+        prev.style.display = 'inline';
     }
     if (!this.current.getNext()) {
-        next.className += ' hide';
+        next.style.display = 'none';
     } else {
-        next.className = next.className.replace('hide', '');
+        next.style.display = 'inline';
     }
 };
 
@@ -82,9 +103,9 @@ Page.prototype.getPrev = function () {
 };
 
 Page.prototype.show = function () {
-    this.el.className = this.el.className.replace('hide', '');
+    this.el.style.display = 'inline';
 };
 
 Page.prototype.hide = function () {
-    this.el.className += ' hide';
+    this.el.style.display = 'none';
 };

@@ -4,30 +4,49 @@
     <meta charset="UTF-8">
     <title>Wizard</title>
     <style>
-        .hide {
-            display: none;
+        #submitWizard fieldset {
+            border: 1px solid;
+            margin-bottom: 10px;
         }
     </style>
 </head>
 <body>
 <section>
+
+    <section id="wizardStatusContainer">
+    </section>
+
     <form id="submitWizard">
         <fieldset id="step1">
-            <legend>Step 1</legend>
-            <label>Product Name:</label>
+            <h3>Product Information</h3>
+            <label>Product Name</label>
             <input name="productName" type="text"/>
             <label>Model Number</label>
             <input name="modelNumber" type="text"/>
+            <label>Wireless Chipset</label>
+            <input name="wirelessChipset" type="text"/>
+            <label>Operating System</label>
+            <input name="operatingSystem" type="text"/>
         </fieldset>
         <fieldset id="step2">
-            <legend>Step 2</legend>
-            <label>Product Category:</label>
-            <input name="productCateory" type="text"/>
+            <h3>Product Category</h3>
+            <label>Product Category</label>
+            <select name="productCateory">
+                <option>Select category</option>
+            </select>
+            <label>Product Second Category</label>
+            <select name="productCateory">
+                <option>Select second category</option>
+            </select>
         </fieldset>
         <fieldset id="step3">
-            <legend>Step 3</legend>
-            <label>Product Identifiers:</label>
-            <input name="productIdentifiers" type="text"/>
+            <h3>Product Options</h3>
+            <label>Additional Options 1</label>
+            <input name="option1" type="checkbox"/>
+            <label>Additional Options 1</label>
+            <input name="option2" type="checkbox"/>
+            <label>Additional Options 1</label>
+            <input name="option3" type="checkbox"/>
         </fieldset>
         <footer>
             <input type="button" id="prev" value="Prev"/>
@@ -40,7 +59,7 @@
 <script src="wizard.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var wizard = new Wizard('submitWizard');
+        var wizard = new Wizard('submitWizard', 'wizardStatusContainer');
     });
 </script>
 </html>
