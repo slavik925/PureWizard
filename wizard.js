@@ -5,6 +5,7 @@ function Wizard(formId, statusSectionId) {
     this.statusSectionId = statusSectionId || null;
     this.pages = [];
     this.current = null;
+    this.currentIndex = 0;
 
     var fieldsets = document.getElementById(this.formId).children,
         i, node;
@@ -24,27 +25,18 @@ function Wizard(formId, statusSectionId) {
         }
     }
 
-    var ul, li;
-
     if (this.statusSectionId) {
-        this.statusSection = document.getElementById(this.statusSectionId);
-        ul = document.createElement('ul');
+        this.statusSection = new WizardSteps(this.pages, document.getElementById(this.statusSectionId));
     }
 
-    this.pages.forEach(function (p, i) {
+    this.pages.forEach(function (p) {
         p.hide();
-        li = document.createElement('li');
-        li.appendChild(document.createTextNode('Step ' + (i + 1)));
-        ul.appendChild(li);
     });
-
-    if (this.statusSection) {
-        this.statusSection.appendChild(ul);
-    }
 
     if (this.pages.length > 0) {
         this.current = this.pages[0];
         this.current.show();
+        this.statusSection.setStep(0);
         this.toggleButtons();
     }
 
@@ -60,6 +52,7 @@ Wizard.prototype.next = function () {
         this.current.hide();
         this.current = this.current.getNext();
         this.current.show();
+        this.statusSection.setStep(++this.currentIndex);
         this.toggleButtons();
     }
 };
@@ -69,6 +62,7 @@ Wizard.prototype.prev = function () {
         this.current.hide();
         this.current = this.current.getPrev();
         this.current.show();
+        this.statusSection.setStep(--this.currentIndex);
         this.toggleButtons();
     }
 };
@@ -108,4 +102,24 @@ Page.prototype.show = function () {
 
 Page.prototype.hide = function () {
     this.el.style.display = 'none';
+};
+
+function WizardSteps(pages, container) {
+
+    this.el = document.createElement('ul');
+    var self = this, li;
+
+    pages.forEach(function (e, i) {
+        li = document.createElement('li');
+        li.appendChild(document.createTextNode('Step ' + (i + 1)));
+        self.el.appendChild(li);
+    });
+    container.appendChild(self.el);
+}
+
+WizardSteps.prototype.setStep = function (stepNumber) {
+    for (var i = 0; i < this.el.children.length; i++) {
+        this.el.children[i].style.fontWeight = 'normal';
+    }
+    this.el.children[stepNumber].style.fontWeight = 'bold';
 };
