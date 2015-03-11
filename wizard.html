@@ -3,58 +3,82 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Wizard</title>
-    <style>
-        #submitWizard fieldset {
-            border: 1px solid;
-            margin-bottom: 10px;
-        }
-    </style>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<section>
+<div class="container">
+    <div class="row">
+        <form id="submitWizard" novalidate role="form" class="col-xs-5">
+            <fieldset id="step1">
+                <h3>Product Information</h3>
 
-    <section id="wizardStatusContainer">
-    </section>
+                <div class="form-group">
+                    <label for="productName" class="control-label">Product Name</label>
+                    <input name="productName" class="form-control" id="productName" type="text" required/>
+                </div>
+                <div class="form-group">
+                    <label for="modelNumber" class="control-label">Model Number</label>
+                    <input name="modelNumber" id="modelNumber" type="text" class="form-control"/>
+                </div>
+                <div class="form-group">
+                    <label for="wirelessChipset" class="control-label">Wireless Chipset</label>
+                    <input name="wirelessChipset" id="wirelessChipset" class="form-control" type="text"/>
+                </div>
+                <div class="form-group">
+                    <label for="operatingSystem">Operating System</label>
+                    <input name="operatingSystem" id="operatingSystem" class="form-control" type="text"/>
+                </div>
+            </fieldset>
+            <fieldset id="step2">
+                <h3>Product Category</h3>
 
-    <form id="submitWizard">
-        <fieldset id="step1">
-            <h3>Product Information</h3>
-            <label>Product Name</label>
-            <input name="productName" type="text"/>
-            <label>Model Number</label>
-            <input name="modelNumber" type="text"/>
-            <label>Wireless Chipset</label>
-            <input name="wirelessChipset" type="text"/>
-            <label>Operating System</label>
-            <input name="operatingSystem" type="text"/>
-        </fieldset>
-        <fieldset id="step2">
-            <h3>Product Category</h3>
-            <label>Product Category</label>
-            <select name="productCateory">
-                <option>Select category</option>
-            </select>
-            <label>Product Second Category</label>
-            <select name="productCateory">
-                <option>Select second category</option>
-            </select>
-        </fieldset>
-        <fieldset id="step3">
-            <h3>Product Options</h3>
-            <label>Additional Options 1</label>
-            <input name="option1" type="checkbox"/>
-            <label>Additional Options 1</label>
-            <input name="option2" type="checkbox"/>
-            <label>Additional Options 1</label>
-            <input name="option3" type="checkbox"/>
-        </fieldset>
-        <footer>
-            <input type="button" id="prev" value="Prev"/>
-            <input type="button" id="next" value="Next"/>
-            <input type="submit" value="submit"/>
-        </footer>
-    </form>
-</section>
+                <div class="form-group">
+                    <label>Product Category</label>
+                    <select name="productCateory" class="form-control">
+                        <option>Select category</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Product Second Category</label>
+                    <select name="productCateory" class="form-control">
+                        <option>Select second category</option>
+                    </select>
+                </div>
+            </fieldset>
+            <fieldset id="step3">
+                <h3>Product Options</h3>
+
+                <div class="checkbox">
+                    <label>
+                        <input name="option1" type="checkbox"/>
+                        Additional Options 1
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input name="option2" type="checkbox"/>
+                        Additional Options 2
+                    </label>
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input name="option3" type="checkbox"/>
+                        Additional Options 3
+                    </label>
+                </div>
+            </fieldset>
+            <footer>
+                <input type="button" class="btn btn-default" id="prev" value="Prev"/>
+                <input type="button" class="btn btn-default" id="next" value="Next"/>
+                <input type="submit" class="btn btn-primary" value="Submit"/>
+            </footer>
+        </form>
+
+        <section class="col-xs-7" id="wizardStatusContainer">
+        </section>
+
+    </div>
+</div>
 </body>
 <script src="wizard.js"></script>
 <script>
