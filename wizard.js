@@ -27,7 +27,15 @@ function Wizard(formId, statusSectionId) {
     }
 
     if (this.statusSectionId) {
-        this.statusSection = new WizardSteps(this.pages, document.getElementById(this.statusSectionId));
+        var statusSectionContainer = document.getElementById(this.statusSectionId);
+        this.statusSection = new WizardSteps(this.pages, statusSectionContainer);
+        statusSectionContainer.addEventListener('click', function (e) {
+            var link = e.target;
+            if (link.tagName.toLocaleLowerCase() === 'a') {
+                var pageNumber = link.attributes['data-step'].value;
+                self.goToPage(self.pages[pageNumber], pageNumber);
+            }
+        });
     }
 
     this.pages.forEach(function (p) {
@@ -49,23 +57,23 @@ function Wizard(formId, statusSectionId) {
     });
 }
 Wizard.prototype.next = function () {
-    if (this.current.getNext) {
-        this.current.hide();
-        this.current = this.current.getNext();
-        this.current.show();
-        this.statusSection.setStep(++this.currentIndex);
-        this.toggleButtons();
+    if (this.current.getNext()) {
+        this.goToPage(this.current.getNext(), ++this.currentIndex);
     }
 };
 
 Wizard.prototype.prev = function () {
     if (this.current.getPrev()) {
-        this.current.hide();
-        this.current = this.current.getPrev();
-        this.current.show();
-        this.statusSection.setStep(--this.currentIndex);
-        this.toggleButtons();
+        this.goToPage(this.current.getPrev(), --this.currentIndex);
     }
+};
+
+Wizard.prototype.goToPage = function (page, step) {
+    this.current.hide();
+    this.current = page;
+    this.current.show();
+    this.statusSection.setStep(step);
+    this.toggleButtons();
 };
 
 Wizard.prototype.toggleButtons = function () {
@@ -105,7 +113,7 @@ Page.prototype.hide = function () {
     this.el.style.display = 'none';
 };
 
-function WizardSteps(pages, container) {
+function WizardSteps(pages, container, wizard) {
 
     this.el = document.createElement('ul');
     var self = this, li, a;
@@ -114,6 +122,7 @@ function WizardSteps(pages, container) {
         li = document.createElement('li');
         a = document.createElement('a');
         a.setAttribute('href', '#');
+        a.setAttribute('data-step', i.toString());
         a.appendChild(document.createTextNode('Step ' + (i + 1)));
         li.appendChild(a);
         self.el.appendChild(li);
