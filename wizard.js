@@ -32,7 +32,8 @@ function Wizard(formId, statusSectionId) {
         statusSectionContainer.addEventListener('click', function (e) {
             var link = e.target;
             if (link.tagName.toLocaleLowerCase() === 'a') {
-                var pageNumber = link.attributes['data-step'].value;
+                var pageNumber = Number(link.attributes['data-step'].value);
+                console.log('Status section click go to page ' + pageNumber);
                 self.goToPage(self.pages[pageNumber], pageNumber);
             }
         });
@@ -58,13 +59,13 @@ function Wizard(formId, statusSectionId) {
 }
 Wizard.prototype.next = function () {
     if (this.current.getNext()) {
-        this.goToPage(this.current.getNext(), ++this.currentIndex);
+        this.goToPage(this.current.getNext(), this.currentIndex + 1);
     }
 };
 
 Wizard.prototype.prev = function () {
     if (this.current.getPrev()) {
-        this.goToPage(this.current.getPrev(), --this.currentIndex);
+        this.goToPage(this.current.getPrev(), this.currentIndex - 1);
     }
 };
 
@@ -72,6 +73,7 @@ Wizard.prototype.goToPage = function (page, step) {
     this.current.hide();
     this.current = page;
     this.current.show();
+    this.currentIndex = step;
     this.statusSection.setStep(step);
     this.toggleButtons();
 };
