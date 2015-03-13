@@ -26,7 +26,7 @@ function Wizard(formId, statusSectionId) {
         }
     }
 
-    if (this.statusSectionId) {
+    if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
         var statusSectionContainer = document.getElementById(this.statusSectionId);
         this.statusSection = new WizardSteps(this.pages, statusSectionContainer);
         statusSectionContainer.addEventListener('click', function (e) {
@@ -46,7 +46,9 @@ function Wizard(formId, statusSectionId) {
     if (this.pages.length > 0) {
         this.current = this.pages[0];
         this.current.show();
-        this.statusSection.setStep(0);
+        if (this.statusSection) {
+            this.statusSection.setStep(0);
+        }
         this.toggleButtons();
     }
 
@@ -74,7 +76,9 @@ Wizard.prototype.goToPage = function (page, step) {
     this.current = page;
     this.current.show();
     this.currentIndex = step;
-    this.statusSection.setStep(step);
+    if (this.statusSection) {
+        this.statusSection.setStep(step);
+    }
     this.toggleButtons();
 };
 
