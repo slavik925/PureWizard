@@ -52,10 +52,12 @@ function Wizard(formId, statusSectionId) {
         this.toggleButtons();
     }
 
-    document.getElementById('next').addEventListener('click', function () {
+    document.getElementById('next').addEventListener('click', function (e) {
+        e.preventDefault();
         Wizard.prototype.next.call(self);
     });
-    document.getElementById('prev').addEventListener('click', function () {
+    document.getElementById('prev').addEventListener('click', function (e) {
+        e.preventDefault();
         Wizard.prototype.prev.call(self);
     });
 }
@@ -72,19 +74,25 @@ Wizard.prototype.prev = function () {
 };
 
 Wizard.prototype.goToPage = function (page, step) {
-    this.current.hide();
-    this.current = page;
-    this.current.show();
-    this.currentIndex = step;
-    if (this.statusSection) {
-        this.statusSection.setStep(step);
+    if (!this.current.isContainsError()) {
+        this.current.hide();
+        this.current = page;
+        this.current.show();
+        this.currentIndex = step;
+        if (this.statusSection) {
+            this.statusSection.setStep(step);
+        }
+        this.toggleButtons();
     }
-    this.toggleButtons();
 };
 
 Wizard.prototype.toggleButtons = function () {
     var prev = document.getElementById('prev'),
-        next = document.getElementById('next');
+        next = document.getElementById('next'),
+        finish = document.getElementById('finish');
+
+    finish.style.display = 'none';
+
     if (!this.current.getPrev()) {
         prev.style.display = 'none';
     } else {
@@ -92,6 +100,7 @@ Wizard.prototype.toggleButtons = function () {
     }
     if (!this.current.getNext()) {
         next.style.display = 'none';
+        finish.style.display = 'inline';
     } else {
         next.style.display = 'inline';
     }
@@ -103,6 +112,20 @@ function Page(formId, prev, next) {
     this.next = next || null;
     this.el = document.getElementById(this.containerId);
 }
+
+Page.prototype.isContainsError = function () {
+    var requiredInputs = this.el.querySelectorAll(':required'),
+        containsErrors = false;
+
+    for (var i = 0; i < requiredInputs.length; i++) {
+        if (!requiredInputs[i].checkValidity()) {
+            requiredInputs[i].parentNode.className += ' has-error';
+            containsErrors = true;
+        }
+    }
+
+    return containsErrors;
+};
 
 Page.prototype.getNext = function () {
     return this.next;
@@ -122,11 +145,13 @@ Page.prototype.hide = function () {
 function WizardSteps(pages, container, wizard) {
 
     this.el = document.createElement('ul');
+    this.el.className += ' list-group';
     var self = this, li, a;
 
     pages.forEach(function (e, i) {
         li = document.createElement('li');
         a = document.createElement('a');
+        li.className += ' list-group-item';
         a.setAttribute('href', '#');
         a.setAttribute('data-step', i.toString());
         a.appendChild(document.createTextNode('Step ' + (i + 1)));

@@ -4,11 +4,19 @@
     <meta charset="UTF-8">
     <title>Wizard</title>
     <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        #wizardStatusContainer {
+            margin-top: 60px;
+        }
+    </style>
 </head>
 <body>
 <div class="container">
     <div class="row">
-        <form id="submitWizard" novalidate role="form" class="col-xs-5">
+        <section class="col-md-2" id="wizardStatusContainer">
+        </section>
+
+        <form id="submitWizard" novalidate role="form" class="col-md-3">
             <fieldset id="step1">
                 <h3>Product Information</h3>
 
@@ -68,15 +76,20 @@
                 </div>
             </fieldset>
             <footer>
-                <input type="button" class="btn btn-default" id="prev" value="Prev"/>
-                <input type="button" class="btn btn-default" id="next" value="Next"/>
-                <input type="submit" class="btn btn-primary" value="Submit"/>
+                <button class="btn btn-default" id="prev">
+                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
+                    Prev
+                </button>
+                <button class="btn btn-default" id="next">
+                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
+                    Next
+                </button>
+                <button class="btn btn-primary" id="finish">
+                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+                    Finish
+                </button>
             </footer>
         </form>
-
-        <section class="col-xs-7" id="wizardStatusContainer">
-        </section>
-
     </div>
 </div>
 </body>
