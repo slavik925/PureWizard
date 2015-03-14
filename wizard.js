@@ -1,14 +1,15 @@
-function Wizard(formId, statusSectionId) {
+function Wizard(config) {
 
     var self = this;
 
-    this.formId = formId;
-    this.statusSectionId = statusSectionId || null;
+    this.config = config;
+    this.statusSectionId = this.config.statusContainerCfg ? this.config.statusContainerCfg.containerId : null;
     this.pages = [];
     this.current = null;
     this.currentIndex = 0;
 
-    var fieldsets = document.getElementById(this.formId).children,
+    var form = document.getElementById(this.config.containerId);
+    var fieldsets = form.children,
         i, node;
 
     for (i = 0; i < fieldsets.length; i++) {
@@ -28,7 +29,7 @@ function Wizard(formId, statusSectionId) {
 
     if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
         var statusSectionContainer = document.getElementById(this.statusSectionId);
-        this.statusSection = new WizardSteps(this.pages, statusSectionContainer);
+        this.statusSection = new WizardSteps(this.pages, statusSectionContainer, this.config.statusContainerCfg);
         statusSectionContainer.addEventListener('click', function (e) {
             var link = e.target;
             if (link.tagName.toLocaleLowerCase() === 'a') {
@@ -60,6 +61,13 @@ function Wizard(formId, statusSectionId) {
         e.preventDefault();
         Wizard.prototype.prev.call(self);
     });
+
+    document.getElementById('finish').addEventListener('click', function (e) {
+        e.preventDefault();
+        if (!self.current.isContainsError()) {
+            form.submit();
+        }
+    });
 }
 Wizard.prototype.next = function () {
     if (this.current.getNext()) {
@@ -74,7 +82,7 @@ Wizard.prototype.prev = function () {
 };
 
 Wizard.prototype.goToPage = function (page, step) {
-    if (!this.current.isContainsError()) {
+    if (!this.current.isContainsError() || this.currentIndex > step) {
         this.current.hide();
         this.current = page;
         this.current.show();
@@ -114,17 +122,32 @@ function Page(formId, prev, next) {
 }
 
 Page.prototype.isContainsError = function () {
-    var requiredInputs = this.el.querySelectorAll(':required'),
-        containsErrors = false;
-
-    for (var i = 0; i < requiredInputs.length; i++) {
-        if (!requiredInputs[i].checkValidity()) {
-            requiredInputs[i].parentNode.className += ' has-error';
-            containsErrors = true;
+    var invalidInputs = this.el.querySelectorAll(':invalid'),
+        containsErrors = false,
+        i, invalidInputLabel;
+    for (i = 0; i < invalidInputs.length; i++) {
+        invalidInputLabel = this.el.querySelector('label[for="' + invalidInputs[i].id + '"]');
+        if (invalidInputs[i].className.indexOf('has-error') === -1) {
+            invalidInputs[i].className += ' has-error';
+            if (invalidInputLabel && invalidInputLabel.className.indexOf('has-error') === -1) {
+                invalidInputLabel.className += ' has-error';
+            }
         }
+        containsErrors = true;
+    }
+
+    var validElements = this.el.querySelectorAll('.has-error:valid');
+    for (i = 0; i < validElements.length; i++) {
+        invalidInputLabel = this.el.querySelector('label[for="' + validElements[i].id + '"]');
+        validElements[i].className = validElements[i].className.replace('has-error', '');
+        invalidInputLabel.className = invalidInputLabel.className.replace('has-error', '');
     }
 
     return containsErrors;
+};
+
+Page.prototype.getTitle = function () {
+    return this.el.querySelector('legend').innerHTML;
 };
 
 Page.prototype.getNext = function () {
@@ -142,19 +165,24 @@ Page.prototype.hide = function () {
     this.el.style.display = 'none';
 };
 
-function WizardSteps(pages, container, wizard) {
+function WizardSteps(pages, container, config) {
+
+    var ulClass = config.ulClass || '';
+    var liClass = config.liClass || '';
+    var aClass = config.aClass || '';
 
     this.el = document.createElement('ul');
-    this.el.className += ' list-group';
+    this.el.className += ' ' + ulClass;
     var self = this, li, a;
 
     pages.forEach(function (e, i) {
         li = document.createElement('li');
         a = document.createElement('a');
-        li.className += ' list-group-item';
+        li.className += ' ' + liClass;
         a.setAttribute('href', '#');
         a.setAttribute('data-step', i.toString());
-        a.appendChild(document.createTextNode('Step ' + (i + 1)));
+        a.appendChild(document.createTextNode(e.getTitle()));
+        a.className += ' ' + aClass;
         li.appendChild(a);
         self.el.appendChild(li);
     });

@@ -3,100 +3,198 @@
 <head lang="en">
     <meta charset="UTF-8">
     <title>Wizard</title>
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
     <style>
-        #wizardStatusContainer {
-            margin-top: 60px;
+
+        .container {
+            margin: 20px;
         }
+
+        .pure-menu {
+            padding-left: 10px;
+        }
+
+        .has-error {
+            color: #b94a48;
+            border-color: #e9322d !important;
+        }
+
+        input[type=date] {
+            height: 35px;
+        }
+
+        textarea {
+            resize: vertical; /* user can resize vertically, but width is fixed */
+        }
+
+        .custom-restricted-width {
+            /* To limit the menu width to the content of the menu: */
+            display: inline-block;
+            /* Or set the width explicitly: */
+            /* width: 10em; */
+        }
+
     </style>
 </head>
 <body>
 <div class="container">
-    <div class="row">
-        <section class="col-md-2" id="wizardStatusContainer">
-        </section>
-
-        <form id="submitWizard" novalidate role="form" class="col-md-3">
+    <div class="pure-g">
+        <form id="submitWizard" novalidate class="pure-u-3-4 pure-form pure-form-stacked">
             <fieldset id="step1">
-                <h3>Product Information</h3>
+                <legend>Step 1: Product Information</legend>
+                <p>
+                    Product Details - The following fields must include the description of your product exactly as you
+                    wish the final certification to read. Please verify the name before submission.
+                </p>
 
-                <div class="form-group">
-                    <label for="productName" class="control-label">Product Name</label>
-                    <input name="productName" class="form-control" id="productName" type="text" required/>
-                </div>
-                <div class="form-group">
-                    <label for="modelNumber" class="control-label">Model Number</label>
-                    <input name="modelNumber" id="modelNumber" type="text" class="form-control"/>
-                </div>
-                <div class="form-group">
-                    <label for="wirelessChipset" class="control-label">Wireless Chipset</label>
-                    <input name="wirelessChipset" id="wirelessChipset" class="form-control" type="text"/>
-                </div>
-                <div class="form-group">
-                    <label for="operatingSystem">Operating System</label>
-                    <input name="operatingSystem" id="operatingSystem" class="form-control" type="text"/>
+                <label for="productName">Product Name <sup>*</sup></label>
+                <input name="productName" class="pure-u-1" value="" id="productName" type="text"
+                       placeholder="">
+
+                <div class="pure-g">
+                    <div class="pure-u-1-2">
+                        <label for="modelNumber">Model Number <sup>*</sup></label>
+                        <input name="modelNumber" class="pure-u-23-24" id="modelNumber" type="number" max="100"
+                               min="0"/>
+                    </div>
+                    <div class="pure-u-1-2">
+                        <label for="url">Product URL</label>
+                        <input name="url" class="pure-u-1" id="url" type="url"/>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <div class="pure-g">
+                            <div class="pure-u-1-2">
+                                <label for="email">Email</label>
+                                <input name="email" class="pure-u-22-24" id="email" type="email"/>
+                            </div>
+                            <div class="pure-u-1-2">
+                                <label for="telephone">Telephone</label>
+                                <input name="telephone" class="pure-u-22-24" id="telephone" type="tel"/>
+                            </div>
+                            <div class="pure-u-1-2">
+                                <label for="custom1">Custom 1</label>
+                                <input name="custom1" class="pure-u-22-24" id="custom1" type="email"/>
+                            </div>
+                            <div class="pure-u-1-2">
+                                <label for="custom2">Custom 2</label>
+                                <input name="custom2" class="pure-u-22-24" id="custom2" type="tel"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <div class="pure-g">
+                            <div class="pure-u-1-4">
+                                <label for="publishOnDate">Publish On Date</label>
+                                <select id="publishOnDate">
+                                    <option>Now</option>
+                                    <option>Date</option>
+                                    <option>No</option>
+                                </select>
+                            </div>
+                            <div class="pure-u-3-4">
+                                <label for="publishOnDateValue">&nbsp;</label>
+                                <input id="publishOnDateValue" name="publishOnDateValue" type="date"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <label for="otherNotes">Other notes</label>
+                        <textarea id="otherNotes" name="otherNotes" class="pure-u-23-24"></textarea>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <label for="productLogo">Choose product logo</label>
+                        <input class="pure-u-1" name="productLogo" id="productLogo" type="file"/>
+                    </div>
                 </div>
             </fieldset>
             <fieldset id="step2">
-                <h3>Product Category</h3>
+                <legend>Step 2: Product Category</legend>
+                <p>Product Category - The following fields must include the description of your product exactly as you
+                    wish the final certification to read. Please verify the name before submission.</p>
 
-                <div class="form-group">
-                    <label>Product Category</label>
-                    <select name="productCateory" class="form-control">
-                        <option>Select category</option>
-                    </select>
+                <div class="pure-g">
+                    <div class="pure-u-1-2">
+                        <label for="productCategory">Product Category</label>
+                        <select class="pure-u-22-24" name="productCategory" id="productCategory" required>
+                            <option value="">Select category</option>
+                            <option>AL</option>
+                            <option>CA</option>
+                            <option>IL</option>
+                        </select>
+                    </div>
+                    <div class="pure-u-1-2">
+                        <label for="productCategorySecond">Product Second Category</label>
+                        <select class="pure-u-23-24" name="productCategorySecond" id="productCategorySecond">
+                            <option value="-1">Select second category</option>
+                            <option>AL</option>
+                            <option>CA</option>
+                            <option>IL</option>
+                        </select>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Product Second Category</label>
-                    <select name="productCateory" class="form-control">
-                        <option>Select second category</option>
-                    </select>
-                </div>
+                <label for="option1" class="pure-checkbox">
+                    <input name="option1" id="option1" type="checkbox" required>
+                    Additional Options 1
+                </label>
+                <label for="option2" class="pure-checkbox">
+                    <input name="option2" id="option2" type="checkbox"/>
+                    Additional Options 2
+                </label>
+
             </fieldset>
             <fieldset id="step3">
-                <h3>Product Options</h3>
+                <legend>Step 3: Product Options</legend>
 
-                <div class="checkbox">
-                    <label>
-                        <input name="option1" type="checkbox"/>
-                        Additional Options 1
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input name="option2" type="checkbox"/>
-                        Additional Options 2
-                    </label>
-                </div>
-                <div class="checkbox">
-                    <label>
-                        <input name="option3" type="checkbox"/>
-                        Additional Options 3
-                    </label>
-                </div>
+                <label for="option-two" class="pure-radio">
+                    <input id="option-two" type="radio" name="optionsRadios" value="option1" required>
+                    Here's a radio button. You can choose this one..
+                </label>
+
+                <label for="option-three" class="pure-radio">
+                    <input id="option-three" type="radio" name="optionsRadios" value="option2" required>
+                    ..Or this one!
+                </label>
+
+                <label for="cb" class="pure-checkbox">
+                    <input id="cb" required type="checkbox"> I've read the terms and conditions
+                </label>
+
             </fieldset>
             <footer>
-                <button class="btn btn-default" id="prev">
-                    <span class="glyphicon glyphicon-chevron-left" aria-hidden="true"></span>
-                    Prev
-                </button>
-                <button class="btn btn-default" id="next">
-                    <span class="glyphicon glyphicon-chevron-right" aria-hidden="true"></span>
-                    Next
-                </button>
-                <button class="btn btn-primary" id="finish">
-                    <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
-                    Finish
-                </button>
+                <button class="pure-button" id="prev">Prev</button>
+                <button class="pure-button" id="next">Next</button>
+                <button class="pure-button pure-button-primary" id="finish">Finish</button>
             </footer>
         </form>
+        <div class="pure-menu custom-restricted-width pure-u-1-4">
+            <span class="pure-menu-heading">Wizard Steps</span>
+            <section id="wizardStatusContainer">
+            </section>
+        </div>
     </div>
 </div>
 </body>
 <script src="wizard.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        var wizard = new Wizard('submitWizard', 'wizardStatusContainer');
+
+        var WizardStatusContainerConfig = {
+            containerId: 'wizardStatusContainer',
+            ulClass: 'pure-menu-list',
+            liClass: 'pure-menu-item',
+            aClass: 'pure-menu-link'
+        };
+
+        var wizardConf = {
+            containerId: 'submitWizard',
+            statusContainerCfg: WizardStatusContainerConfig
+        };
+
+        var wizard = new Wizard(wizardConf);
     });
 </script>
 </html>
