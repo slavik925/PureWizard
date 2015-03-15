@@ -89,6 +89,14 @@ Wizard.prototype.onPageChange = function (callback) {
 Wizard.prototype.goToPage = function (page, step) {
     if (!this.current.isContainsError() || this.currentIndex > step) {
 
+        // If goes for example from page 1 to 3 and page 2 is invalid
+        // validate through page 2
+        if (this.currentIndex < step && this.currentIndex + 1 !== step) {
+            if (this.pages.filter(Page.prototype.isValid).length > 1) {
+                return;
+            }
+        }
+
         var indexBefore = this.currentIndex;
 
         this.current.hide();
@@ -146,8 +154,16 @@ function Page(formId, prev, next) {
     this.el = document.getElementById(this.containerId);
 }
 
+Page.prototype.getInvalidElements = function () {
+    return this.el.querySelectorAll(':invalid');
+};
+
+Page.prototype.isValid = function () {
+    return this.getInvalidElements().length === 0;
+};
+
 Page.prototype.isContainsError = function () {
-    var invalidInputs = this.el.querySelectorAll(':invalid'),
+    var invalidInputs = this.getInvalidElements(),
         containsErrors = false,
         i, invalidInputLabel, errorMsg, errorMsgContainer;
 
