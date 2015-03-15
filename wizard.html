@@ -47,14 +47,14 @@
                     wish the final certification to read. Please verify the name before submission.
                 </p>
 
-                <label for="productName">Product Name <sup>*</sup></label>
-                <input name="productName" class="pure-u-1" value="" id="productName" type="text"
+                <label for="productName">Product Name <sup>*</sup> <sup class="has-error has-error-label" id="productNameError"></sup></label>
+                <input name="productName" data-error-msg="This field is required!" required class="pure-u-1" value="" id="productName" type="text"
                        placeholder="">
 
                 <div class="pure-g">
                     <div class="pure-u-1-2">
-                        <label for="modelNumber">Model Number <sup>*</sup></label>
-                        <input name="modelNumber" class="pure-u-23-24" id="modelNumber" type="number" max="100"
+                        <label for="modelNumber">Model Number <sup>*</sup> <sup class="has-error has-error-label" id="modelNumberError"></sup></label>
+                        <input name="modelNumber" data-error-msg="Should be between 0 and 100" class="pure-u-23-24" id="modelNumber" type="number" max="100"
                                min="0"/>
                     </div>
                     <div class="pure-u-1-2">
@@ -191,10 +191,15 @@
 
         var wizardConf = {
             containerId: 'submitWizard',
+            hideNextPrevButtons: false,
             statusContainerCfg: WizardStatusContainerConfig
         };
 
         var wizard = new Wizard(wizardConf);
+
+        wizard.onPageChange(function(e){
+            console.log('Changed page from ' + e.detail.pageBefore + ' to ' + e.detail.pageAfter);
+        });
     });
 </script>
 </html>

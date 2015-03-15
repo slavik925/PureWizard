@@ -7,9 +7,9 @@ function Wizard(config) {
     this.pages = [];
     this.current = null;
     this.currentIndex = 0;
+    this.form = document.getElementById(this.config.containerId);
 
-    var form = document.getElementById(this.config.containerId);
-    var fieldsets = form.children,
+    var fieldsets = this.form.children,
         i, node;
 
     for (i = 0; i < fieldsets.length; i++) {
@@ -34,7 +34,6 @@ function Wizard(config) {
             var link = e.target;
             if (link.tagName.toLocaleLowerCase() === 'a') {
                 var pageNumber = Number(link.attributes['data-step'].value);
-                console.log('Status section click go to page ' + pageNumber);
                 self.goToPage(self.pages[pageNumber], pageNumber);
             }
         });
@@ -65,7 +64,7 @@ function Wizard(config) {
     document.getElementById('finish').addEventListener('click', function (e) {
         e.preventDefault();
         if (!self.current.isContainsError()) {
-            form.submit();
+            self.form.submit();
         }
     });
 }
@@ -81,8 +80,17 @@ Wizard.prototype.prev = function () {
     }
 };
 
+Wizard.prototype.onPageChange = function (callback) {
+    this.form.addEventListener('onPageChanged', function (e) {
+        callback(e);
+    });
+};
+
 Wizard.prototype.goToPage = function (page, step) {
     if (!this.current.isContainsError() || this.currentIndex > step) {
+
+        var indexBefore = this.currentIndex;
+
         this.current.hide();
         this.current = page;
         this.current.show();
@@ -91,26 +99,43 @@ Wizard.prototype.goToPage = function (page, step) {
             this.statusSection.setStep(step);
         }
         this.toggleButtons();
+
+        var event = new CustomEvent('onPageChanged', {
+            detail: {
+                'pageBefore': indexBefore + 1,
+                'pageAfter': this.currentIndex + 1
+            }
+        });
+        this.form.dispatchEvent(event);
     }
 };
 
 Wizard.prototype.toggleButtons = function () {
     var prev = document.getElementById('prev'),
         next = document.getElementById('next'),
-        finish = document.getElementById('finish');
+        finish = document.getElementById('finish'),
+        self = this;
 
     finish.style.display = 'none';
 
     if (!this.current.getPrev()) {
-        prev.style.display = 'none';
+        setNextPrevVisibility(prev, false);
     } else {
-        prev.style.display = 'inline';
+        setNextPrevVisibility(prev, true);
     }
     if (!this.current.getNext()) {
-        next.style.display = 'none';
+        setNextPrevVisibility(next, false);
         finish.style.display = 'inline';
     } else {
-        next.style.display = 'inline';
+        setNextPrevVisibility(next, true);
+    }
+
+    function setNextPrevVisibility(button, value) {
+        if (self.config.hideNextPrevButtons) {
+            button.style.display = value ? 'inline' : 'none';
+        } else {
+            button.disabled = !value;
+        }
     }
 };
 
@@ -124,25 +149,42 @@ function Page(formId, prev, next) {
 Page.prototype.isContainsError = function () {
     var invalidInputs = this.el.querySelectorAll(':invalid'),
         containsErrors = false,
-        i, invalidInputLabel;
+        i, invalidInputLabel, errorMsg, errorMsgContainer;
+
     for (i = 0; i < invalidInputs.length; i++) {
         invalidInputLabel = this.el.querySelector('label[for="' + invalidInputs[i].id + '"]');
+
         if (invalidInputs[i].className.indexOf('has-error') === -1) {
+
             invalidInputs[i].className += ' has-error';
             if (invalidInputLabel && invalidInputLabel.className.indexOf('has-error') === -1) {
                 invalidInputLabel.className += ' has-error';
+            }
+            // If error message and error container exists display error
+            errorMsg = invalidInputs[i].getAttribute('data-error-msg');
+            errorMsgContainer = document.getElementById(invalidInputs[i].id + 'Error');
+            if (errorMsg && errorMsgContainer) {
+                errorMsgContainer.innerHTML = errorMsg;
             }
         }
         containsErrors = true;
     }
 
+    // Clean the errors from valid elements
     var validElements = this.el.querySelectorAll('.has-error:valid');
     for (i = 0; i < validElements.length; i++) {
-        invalidInputLabel = this.el.querySelector('label[for="' + validElements[i].id + '"]');
         validElements[i].className = validElements[i].className.replace('has-error', '');
-        invalidInputLabel.className = invalidInputLabel.className.replace('has-error', '');
-    }
 
+        invalidInputLabel = this.el.querySelector('label[for="' + validElements[i].id + '"]');
+        errorMsgContainer = document.getElementById(validElements[i].id + 'Error');
+
+        if (invalidInputLabel) {
+            invalidInputLabel.className = invalidInputLabel.className.replace('has-error', '');
+        }
+        if (errorMsgContainer) {
+            errorMsgContainer.innerHTML = '';
+        }
+    }
     return containsErrors;
 };
 
