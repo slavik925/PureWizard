@@ -27,10 +27,13 @@ function Wizard(config) {
         }
     }
 
+    history.pushState(0, null, '#step0');
+
     if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
         var statusSectionContainer = document.getElementById(this.statusSectionId);
         this.statusSection = new WizardSteps(this.pages, statusSectionContainer, this.config.statusContainerCfg);
         statusSectionContainer.addEventListener('click', function (e) {
+            e.preventDefault();
             var link = e.target;
             if (link.tagName.toLocaleLowerCase() === 'a') {
                 var pageNumber = Number(link.attributes['data-step'].value);
@@ -52,6 +55,10 @@ function Wizard(config) {
         this.toggleButtons();
     }
 
+    window.addEventListener('popstate', function (e) {
+        self.goToPageByNumber(e.state);
+    });
+
     document.getElementById('next').addEventListener('click', function (e) {
         e.preventDefault();
         Wizard.prototype.next.call(self);
@@ -70,20 +77,26 @@ function Wizard(config) {
 }
 Wizard.prototype.next = function () {
     if (this.current.getNext()) {
+        history.pushState(this.currentIndex + 1, null, '#step' + (this.currentIndex + 1));
         this.goToPage(this.current.getNext(), this.currentIndex + 1);
     }
 };
 
 Wizard.prototype.prev = function () {
     if (this.current.getPrev()) {
+        history.pushState(this.currentIndex, null, '#step' + (this.currentIndex - 1));
         this.goToPage(this.current.getPrev(), this.currentIndex - 1);
     }
 };
 
-Wizard.prototype.onPageChange = function (callback) {
+Wizard.prototype.onPageChanged = function (callback) {
     this.form.addEventListener('onPageChanged', function (e) {
         callback(e);
     });
+};
+
+Wizard.prototype.goToPageByNumber = function (pageNumber) {
+    this.goToPage(this.pages[pageNumber], pageNumber);
 };
 
 Wizard.prototype.goToPage = function (page, step) {

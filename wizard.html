@@ -197,7 +197,7 @@
 
         var wizard = new Wizard(wizardConf);
 
-        wizard.onPageChange(function(e){
+        wizard.onPageChanged(function(e){
             console.log('Changed page from ' + e.detail.pageBefore + ' to ' + e.detail.pageAfter);
         });
     });
