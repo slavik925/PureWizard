@@ -2,25 +2,33 @@ function Wizard(config) {
 
     var self = this;
 
-    this.config = config;
+    this.config = config || {};
     this.statusSectionId = this.config.statusContainerCfg ? this.config.statusContainerCfg.containerId : null;
     this.pages = [];
     this.current = null;
     this.currentIndex = 0;
     this.form = document.getElementById(this.config.containerId);
 
+    this.buttons = {
+        next: this.form.querySelector('footer > .next'),
+        prev: this.form.querySelector('footer > .prev'),
+        finish: this.form.querySelector('footer > .finish')
+    };
+
     var fieldsets = this.form.children,
         i, node;
 
+    // Divide form on pages by the fieldsets
     for (i = 0; i < fieldsets.length; i++) {
         node = fieldsets[i];
         if (node.tagName.toLowerCase() === 'fieldset') {
+            // Set the first page as current
             if (this.pages.length === 0) {
-                this.pages.push(new Page(node.id));
+                this.pages.push(new Page(node));
                 this.current = this.pages[0];
             } else {
                 var prev = this.pages[this.pages.length - 1];
-                var newPage = new Page(node.id, prev);
+                var newPage = new Page(node, prev);
                 this.pages.push(newPage);
                 prev.next = newPage;
             }
@@ -29,9 +37,12 @@ function Wizard(config) {
 
     history.pushState(0, null, '#step0');
 
+    //Initialize status section if property is given
     if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
+
         var statusSectionContainer = document.getElementById(this.statusSectionId);
         this.statusSection = new WizardSteps(this.pages, statusSectionContainer, this.config.statusContainerCfg);
+
         statusSectionContainer.addEventListener('click', function (e) {
             e.preventDefault();
             var link = e.target;
@@ -46,8 +57,9 @@ function Wizard(config) {
         p.hide();
     });
 
+
+    // Show the first page
     if (this.pages.length > 0) {
-        this.current = this.pages[0];
         this.current.show();
         if (this.statusSection) {
             this.statusSection.setStep(0);
@@ -59,16 +71,15 @@ function Wizard(config) {
         self.goToPageByNumber(e.state);
     });
 
-    document.getElementById('next').addEventListener('click', function (e) {
+    this.buttons.next.addEventListener('click', function (e) {
         e.preventDefault();
         Wizard.prototype.next.call(self);
     });
-    document.getElementById('prev').addEventListener('click', function (e) {
+    this.buttons.prev.addEventListener('click', function (e) {
         e.preventDefault();
         Wizard.prototype.prev.call(self);
     });
-
-    document.getElementById('finish').addEventListener('click', function (e) {
+    this.buttons.finish.addEventListener('click', function (e) {
         e.preventDefault();
         if (!self.current.isContainsError()) {
             self.form.submit();
@@ -132,23 +143,20 @@ Wizard.prototype.goToPage = function (page, step) {
 };
 
 Wizard.prototype.toggleButtons = function () {
-    var prev = document.getElementById('prev'),
-        next = document.getElementById('next'),
-        finish = document.getElementById('finish'),
-        self = this;
+    var self = this;
 
-    finish.style.display = 'none';
+    self.buttons.finish.style.display = 'none';
 
     if (!this.current.getPrev()) {
-        setNextPrevVisibility(prev, false);
+        setNextPrevVisibility(self.buttons.prev, false);
     } else {
-        setNextPrevVisibility(prev, true);
+        setNextPrevVisibility(self.buttons.prev, true);
     }
     if (!this.current.getNext()) {
-        setNextPrevVisibility(next, false);
-        finish.style.display = 'inline';
+        setNextPrevVisibility(self.buttons.next, false);
+        self.buttons.finish.style.display = 'inline';
     } else {
-        setNextPrevVisibility(next, true);
+        setNextPrevVisibility(self.buttons.next, true);
     }
 
     function setNextPrevVisibility(button, value) {
@@ -160,11 +168,10 @@ Wizard.prototype.toggleButtons = function () {
     }
 };
 
-function Page(formId, prev, next) {
-    this.containerId = formId;
+function Page(container, prev, next) {
+    this.el = container;
     this.prev = prev || null;
     this.next = next || null;
-    this.el = document.getElementById(this.containerId);
 }
 
 Page.prototype.getInvalidElements = function () {

@@ -38,6 +38,64 @@
 </head>
 <body>
 <div class="container">
+
+    <p>
+        Hi, I'm glad to show you a PureWizard plugin that simply can turn any kind of html form into the
+        wizard or master or whatever you name this. There is no matter what size form are two steps or more.
+    </p>
+
+    <p>
+        Lets see the quick demo how it would be looks like on a simple form.
+    </p>
+
+    <div class="pure-g">
+        <form class="pure-u-3-4 pure-form pure-form-stacked" id="wizardSimple">
+            <fieldset>
+                <label for="fName">First Name</label>
+                <input name="fName" value="" id="fName" type="text" placeholder="">
+                <label for="lName">Last Name</label>
+                <input name="lName" value="" id="lName" type="text" placeholder="">
+                <label for="password">Password</label>
+                <input name="password" value="" id="password" type="password" placeholder="">
+            </fieldset>
+
+            <fieldset>
+                <label for="address">Address</label>
+                <input name="address" value="" id="address" type="text" placeholder="">
+                <label for="telephone1">Telephone</label>
+                <input name="telephone" value="" id="telephone1" type="text" placeholder="">
+                <label for="email1">Email</label>
+                <input name="email1" value="" id="email1" type="email" placeholder="">
+            </fieldset>
+
+            <fieldset>
+                <label for="sexf" class="pure-radio">
+                    <input id="sexf" type="radio" name="sex" value="option2">
+                    Male
+                </label>
+                <label for="sexm" class="pure-radio">
+                    <input id="sexm" type="radio" name="sex" value="option2">
+                    Female
+                </label>
+            </fieldset>
+
+            <fieldset>
+                <label for="notes">Notes:</label>
+                <textarea name="notes" id="notes" placeholder=""></textarea>
+                <label for="agree" class="pure-checkbox">
+                    <input name="agree" id="agree" type="checkbox" required>
+                    I agree
+                </label>
+            </fieldset>
+
+            <footer>
+                <button class="prev pure-button">Prev</button>
+                <button class="next pure-button">Next</button>
+                <button class="finish pure-button pure-button-primary">Finish</button>
+            </footer>
+        </form>
+    </div>
+
     <div class="pure-g">
         <form id="submitWizard" novalidate class="pure-u-3-4 pure-form pure-form-stacked">
             <fieldset id="step1">
@@ -47,14 +105,18 @@
                     wish the final certification to read. Please verify the name before submission.
                 </p>
 
-                <label for="productName">Product Name <sup>*</sup> <sup class="has-error has-error-label" id="productNameError"></sup></label>
-                <input name="productName" data-error-msg="This field is required!" required class="pure-u-1" value="" id="productName" type="text"
+                <label for="productName">Product Name <sup>*</sup> <sup class="has-error has-error-label"
+                                                                        id="productNameError"></sup></label>
+                <input name="productName" data-error-msg="This field is required!" required class="pure-u-1" value=""
+                       id="productName" type="text"
                        placeholder="">
 
                 <div class="pure-g">
                     <div class="pure-u-1-2">
-                        <label for="modelNumber">Model Number <sup>*</sup> <sup class="has-error has-error-label" id="modelNumberError"></sup></label>
-                        <input name="modelNumber" data-error-msg="Should be between 0 and 100" class="pure-u-23-24" id="modelNumber" type="number" max="100"
+                        <label for="modelNumber">Model Number <sup>*</sup> <sup class="has-error has-error-label"
+                                                                                id="modelNumberError"></sup></label>
+                        <input name="modelNumber" data-error-msg="Should be between 0 and 100" class="pure-u-23-24"
+                               id="modelNumber" type="number" max="100"
                                min="0"/>
                     </div>
                     <div class="pure-u-1-2">
@@ -165,9 +227,9 @@
 
             </fieldset>
             <footer>
-                <button class="pure-button" id="prev">Prev</button>
-                <button class="pure-button" id="next">Next</button>
-                <button class="pure-button pure-button-primary" id="finish">Finish</button>
+                <button class="pure-button prev">Prev</button>
+                <button class="pure-button next">Next</button>
+                <button class="pure-button pure-button-primary finish">Finish</button>
             </footer>
         </form>
         <div class="pure-menu custom-restricted-width pure-u-1-4">
@@ -191,14 +253,18 @@
 
         var wizardConf = {
             containerId: 'submitWizard',
-            hideNextPrevButtons: false,
             statusContainerCfg: WizardStatusContainerConfig
         };
 
         var wizard = new Wizard(wizardConf);
 
-        wizard.onPageChanged(function(e){
+        wizard.onPageChanged(function (e) {
             console.log('Changed page from ' + e.detail.pageBefore + ' to ' + e.detail.pageAfter);
+        });
+
+        var wizardSimple = new Wizard({
+            containerId: 'wizardSimple',
+            hideNextPrevButtons: true
         });
     });
 </script>
