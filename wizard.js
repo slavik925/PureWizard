@@ -3,6 +3,8 @@ function Wizard(config) {
     var self = this;
 
     this.config = config || {};
+    this.config.enableHistory = this.config.enableHistory || false;
+
     this.statusSectionId = this.config.statusContainerCfg ? this.config.statusContainerCfg.containerId : null;
     this.pages = [];
     this.current = null;
@@ -35,7 +37,9 @@ function Wizard(config) {
         }
     }
 
-    history.pushState(0, null, '#step0');
+    if (this.config.enableHistory) {
+        history.pushState(0, null, '#step0');
+    }
 
     //Initialize status section if property is given
     if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
@@ -57,7 +61,6 @@ function Wizard(config) {
         p.hide();
     });
 
-
     // Show the first page
     if (this.pages.length > 0) {
         this.current.show();
@@ -67,9 +70,11 @@ function Wizard(config) {
         this.toggleButtons();
     }
 
-    window.addEventListener('popstate', function (e) {
-        self.goToPageByNumber(e.state);
-    });
+    if (this.config.enableHistory) {
+        window.addEventListener('popstate', function (e) {
+            self.goToPageByNumber(e.state);
+        });
+    }
 
     this.buttons.next.addEventListener('click', function (e) {
         e.preventDefault();
@@ -79,23 +84,36 @@ function Wizard(config) {
         e.preventDefault();
         Wizard.prototype.prev.call(self);
     });
+
     this.buttons.finish.addEventListener('click', function (e) {
         e.preventDefault();
         if (!self.current.isContainsError()) {
-            self.form.submit();
+            if (self.onSubmitCallback) {
+                self.onSubmitCallback(e, {});
+            } else {
+                self.form.submit();
+            }
         }
+    });
+
+    this.form.addEventListener('reset', function (e) {
+        self.goToPageByNumber(0);
     });
 }
 Wizard.prototype.next = function () {
     if (this.current.getNext()) {
-        history.pushState(this.currentIndex + 1, null, '#step' + (this.currentIndex + 1));
+        if (this.config.enableHistory) {
+            history.pushState(this.currentIndex + 1, null, '#step' + (this.currentIndex + 1));
+        }
         this.goToPage(this.current.getNext(), this.currentIndex + 1);
     }
 };
 
 Wizard.prototype.prev = function () {
     if (this.current.getPrev()) {
-        history.pushState(this.currentIndex, null, '#step' + (this.currentIndex - 1));
+        if (this.config.enableHistory) {
+            history.pushState(this.currentIndex, null, '#step' + (this.currentIndex - 1));
+        }
         this.goToPage(this.current.getPrev(), this.currentIndex - 1);
     }
 };
@@ -104,6 +122,10 @@ Wizard.prototype.onPageChanged = function (callback) {
     this.form.addEventListener('onPageChanged', function (e) {
         callback(e);
     });
+};
+
+Wizard.prototype.onSubmit = function (callback) {
+    this.onSubmitCallback = callback;
 };
 
 Wizard.prototype.goToPageByNumber = function (pageNumber) {

@@ -34,6 +34,17 @@
             /* width: 10em; */
         }
 
+        .button-success,
+        .button-secondary {
+            color: white;
+            border-radius: 4px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-success {
+            background: rgb(28, 184, 65); /* this is a green */
+        }
+
     </style>
 </head>
 <body>
@@ -49,6 +60,12 @@
     </p>
 
     <div class="pure-g">
+
+        <div class="pure-u-1" id="smallWizardOnComplete">
+            <p>Submission complete!</p>
+            <button id="startSmallWizardAgain" class="pure-button button-secondary button-success">Submit new</button>
+        </div>
+
         <form class="pure-u-3-4 pure-form pure-form-stacked" id="wizardSimple">
             <fieldset>
                 <label for="fName">First Name</label>
@@ -244,6 +261,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
+
         var WizardStatusContainerConfig = {
             containerId: 'wizardStatusContainer',
             ulClass: 'pure-menu-list',
@@ -265,6 +283,19 @@
         var wizardSimple = new Wizard({
             containerId: 'wizardSimple',
             hideNextPrevButtons: true
+        });
+
+        wizardSimple.onSubmit(function (e) {
+            document.forms['wizardSimple'].reset();
+            document.getElementById('wizardSimple').style.display = 'none';
+            document.getElementById('smallWizardOnComplete').style.display = 'block';
+        });
+
+
+        document.getElementById('smallWizardOnComplete').style.display = 'none';
+        document.getElementById('startSmallWizardAgain').addEventListener('click', function (e) {
+            document.getElementById('smallWizardOnComplete').style.display = 'none';
+            document.getElementById('wizardSimple').style.display = 'block';
         });
     });
 </script>
