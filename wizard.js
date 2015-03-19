@@ -37,9 +37,6 @@ function Wizard(config) {
         }
     }
 
-    if (this.config.enableHistory) {
-        history.pushState(0, null, '#step0');
-    }
 
     //Initialize status section if property is given
     if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
@@ -72,8 +69,12 @@ function Wizard(config) {
 
     if (this.config.enableHistory) {
         window.addEventListener('popstate', function (e) {
-            self.goToPageByNumber(e.state);
+            if (e.state) {
+                self.goToPageByNumber(e.state - 1);
+            }
         });
+
+        history.pushState(1, null, '#step' + (this.currentIndex + 1));
     }
 
     this.buttons.next.addEventListener('click', function (e) {
@@ -102,19 +103,21 @@ function Wizard(config) {
 }
 Wizard.prototype.next = function () {
     if (this.current.getNext()) {
-        if (this.config.enableHistory) {
-            history.pushState(this.currentIndex + 1, null, '#step' + (this.currentIndex + 1));
+        if (this.goToPage(this.current.getNext(), this.currentIndex + 1)) {
+            if (this.config.enableHistory) {
+                history.pushState(this.currentIndex, null, '#step' + (this.currentIndex + 1));
+            }
         }
-        this.goToPage(this.current.getNext(), this.currentIndex + 1);
     }
 };
 
 Wizard.prototype.prev = function () {
     if (this.current.getPrev()) {
-        if (this.config.enableHistory) {
-            history.pushState(this.currentIndex, null, '#step' + (this.currentIndex - 1));
+        if (this.goToPage(this.current.getPrev(), this.currentIndex - 1)) {
+            if (this.config.enableHistory) {
+                history.pushState(this.currentIndex, null, '#step' + (this.currentIndex + 1));
+            }
         }
-        this.goToPage(this.current.getPrev(), this.currentIndex - 1);
     }
 };
 
@@ -136,9 +139,11 @@ Wizard.prototype.goToPage = function (page, step) {
     if (!this.current.isContainsError() || this.currentIndex > step) {
 
         // If goes for example from page 1 to 3 and page 2 is invalid
-        // validate through page 2
+        // validate through page 2, but page 3 can be invalid
         if (this.currentIndex < step && this.currentIndex + 1 !== step) {
-            if (this.pages.filter(Page.prototype.isValid).length > 1) {
+            if (this.pages.filter(function (p, i, arr) {
+                    return !p.isValid() && (i !== step);
+                }).length > 0) {
                 return;
             }
         }
@@ -160,8 +165,10 @@ Wizard.prototype.goToPage = function (page, step) {
                 'pageAfter': this.currentIndex + 1
             }
         });
-        this.form.dispatchEvent(event);
+        return true;
     }
+
+    return false;
 };
 
 Wizard.prototype.toggleButtons = function () {

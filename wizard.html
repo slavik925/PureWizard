@@ -132,7 +132,8 @@
                     <div class="pure-u-1-2">
                         <label for="modelNumber">Model Number <sup>*</sup> <sup class="has-error has-error-label"
                                                                                 id="modelNumberError"></sup></label>
-                        <input name="modelNumber" data-error-msg="Should be between 0 and 100" class="pure-u-23-24"
+                        <input name="modelNumber" required data-error-msg="Should be between 0 and 100"
+                               class="pure-u-23-24"
                                id="modelNumber" type="number" max="100"
                                min="0"/>
                     </div>
@@ -145,7 +146,8 @@
                         <div class="pure-g">
                             <div class="pure-u-1-2">
                                 <label for="email">Email</label>
-                                <input name="email" class="pure-u-22-24" id="email" type="email"/>
+                                <input name="email" data-error-msg="Invalid email" class="pure-u-22-24" id="email"
+                                       type="email"/>
                             </div>
                             <div class="pure-u-1-2">
                                 <label for="telephone">Telephone</label>
@@ -261,7 +263,6 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
-
         var WizardStatusContainerConfig = {
             containerId: 'wizardStatusContainer',
             ulClass: 'pure-menu-list',
@@ -271,7 +272,8 @@
 
         var wizardConf = {
             containerId: 'submitWizard',
-            statusContainerCfg: WizardStatusContainerConfig
+            statusContainerCfg: WizardStatusContainerConfig,
+            enableHistory: true
         };
 
         var wizard = new Wizard(wizardConf);
