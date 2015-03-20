@@ -73,8 +73,7 @@ function Wizard(config) {
                 self.goToPageByNumber(e.state - 1);
             }
         });
-
-        history.pushState(1, null, '#step' + (this.currentIndex + 1));
+        history.pushState(1, null, null);
     }
 
     this.buttons.next.addEventListener('click', function (e) {
@@ -105,7 +104,7 @@ Wizard.prototype.next = function () {
     if (this.current.getNext()) {
         if (this.goToPage(this.current.getNext(), this.currentIndex + 1)) {
             if (this.config.enableHistory) {
-                history.pushState(this.currentIndex, null, '#step' + (this.currentIndex + 1));
+                history.pushState(this.currentIndex + 1, null, null);
             }
         }
     }
@@ -115,7 +114,7 @@ Wizard.prototype.prev = function () {
     if (this.current.getPrev()) {
         if (this.goToPage(this.current.getPrev(), this.currentIndex - 1)) {
             if (this.config.enableHistory) {
-                history.pushState(this.currentIndex, null, '#step' + (this.currentIndex + 1));
+                history.pushState(this.currentIndex, null, null);
             }
         }
     }
