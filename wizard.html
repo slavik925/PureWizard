@@ -106,9 +106,9 @@
             </fieldset>
 
             <footer>
-                <button class="prev pure-button">Prev</button>
-                <button class="next pure-button">Next</button>
-                <button class="finish pure-button pure-button-primary">Finish</button>
+                <button class="pwPrev pure-button">Prev</button>
+                <button class="pwNext pure-button">Next</button>
+                <button class="pwFinish pure-button pure-button-primary">Finish</button>
             </footer>
         </form>
     </div>
@@ -246,9 +246,9 @@
 
             </fieldset>
             <footer>
-                <button class="pure-button prev">Prev</button>
-                <button class="pure-button next">Next</button>
-                <button class="pure-button pure-button-primary finish">Finish</button>
+                <button class="pure-button pwPrev">Prev</button>
+                <button class="pure-button pwNext">Next</button>
+                <button class="pure-button pure-button-primary pwFinish">Finish</button>
             </footer>
         </form>
         <div class="pure-menu custom-restricted-width pure-u-1-4">
@@ -257,9 +257,17 @@
             </section>
         </div>
     </div>
+    <p>The plugins supports:</p>
+    <ul>
+        <li>Chrome</li>
+        <li>Firefox</li>
+        <li>Opera 11.50</li>
+        <li>Safari 6.0</li>
+        <li>IE 10</li>
+    </ul>
 </div>
 </body>
-<script src="wizard.js"></script>
+<script src="pureWizard.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
@@ -276,13 +284,13 @@
             enableHistory: true
         };
 
-        var wizard = new Wizard(wizardConf);
+        var wizard = new PureWizard(wizardConf);
 
         wizard.onPageChanged(function (e) {
             console.log('Changed page from ' + e.detail.pageBefore + ' to ' + e.detail.pageAfter);
         });
 
-        var wizardSimple = new Wizard({
+        var wizardSimple = new PureWizard({
             containerId: 'wizardSimple',
             hideNextPrevButtons: true
         });
@@ -292,7 +300,6 @@
             document.getElementById('wizardSimple').style.display = 'none';
             document.getElementById('smallWizardOnComplete').style.display = 'block';
         });
-
 
         document.getElementById('smallWizardOnComplete').style.display = 'none';
         document.getElementById('startSmallWizardAgain').addEventListener('click', function (e) {
