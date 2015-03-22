@@ -19,6 +19,10 @@
             border-color: #e9322d !important;
         }
 
+        .current-step {
+            font-weight: bold;
+        }
+
         input[type=date] {
             height: 35px;
         }
@@ -275,7 +279,9 @@
             containerId: 'wizardStatusContainer',
             ulClass: 'pure-menu-list',
             liClass: 'pure-menu-item',
-            aClass: 'pure-menu-link'
+            aClass: 'pure-menu-link',
+            aActiveClass: 'current-step'
+
         };
 
         var wizardConf = {

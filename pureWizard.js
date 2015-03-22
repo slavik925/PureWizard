@@ -301,6 +301,8 @@
 
     function WizardSteps(pages, container, config) {
 
+        this.config = config;
+
         var ulClass = config.ulClass || '';
         var liClass = config.liClass || '';
         var aClass = config.aClass || '';
@@ -324,14 +326,14 @@
         container.appendChild(self.el);
     }
 
+    // Highlight current step with class
     WizardSteps.prototype.setStep = function (stepNumber) {
-        for (var i = 0; i < this.el.children.length; i++) {
-            this.el.children[i].style.fontWeight = 'normal';
+        var currentActive = this.el.querySelector('.' + this.config.aActiveClass);
+        if (currentActive) {
+            currentActive.className = currentActive.className.replace(this.config.aActiveClass, '');
         }
-        this.el.children[stepNumber].style.fontWeight = 'bold';
+        this.el.children[stepNumber].className += ' ' + this.config.aActiveClass;
     };
-    // Just return a value to define the module export.
-    // This example returns an object, but the module
-    // can return a function as the exported value.
+
     return PureWizard;
 }));
