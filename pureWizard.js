@@ -19,6 +19,9 @@
 
         this.config = config || {};
         this.config.enableHistory = this.config.enableHistory || false;
+        this.config.errorClass = this.config.errorClass || 'has-error';
+
+        PureWizardPage.prototype.errorClass = this.config.errorClass;
 
         this.statusSectionId = this.config.statusContainerCfg ? this.config.statusContainerCfg.containerId : null;
         this.pages = [];
@@ -41,11 +44,11 @@
             if (node.tagName.toLowerCase() === 'fieldset') {
                 // Set the first page as current
                 if (this.pages.length === 0) {
-                    this.pages.push(new Page(node));
+                    this.pages.push(new PureWizardPage(node));
                     this.current = this.pages[0];
                 } else {
                     var prev = this.pages[this.pages.length - 1];
-                    var newPage = new Page(node, prev);
+                    var newPage = new PureWizardPage(node, prev);
                     this.pages.push(newPage);
                     prev.next = newPage;
                 }
@@ -220,21 +223,21 @@
         }
     };
 
-    function Page(container, prev, next) {
+    function PureWizardPage(container, prev, next) {
         this.el = container;
         this.prev = prev || null;
         this.next = next || null;
     }
 
-    Page.prototype.getInvalidElements = function () {
+    PureWizardPage.prototype.getInvalidElements = function () {
         return this.el.querySelectorAll(':invalid');
     };
 
-    Page.prototype.isValid = function () {
+    PureWizardPage.prototype.isValid = function () {
         return this.getInvalidElements().length === 0;
     };
 
-    Page.prototype.isContainsError = function () {
+    PureWizardPage.prototype.isContainsError = function () {
         var invalidInputs = this.getInvalidElements(),
             containsErrors = false,
             i, invalidInputLabel, errorMsg, errorMsgContainer;
@@ -242,11 +245,11 @@
         for (i = 0; i < invalidInputs.length; i++) {
             invalidInputLabel = this.el.querySelector('label[for="' + invalidInputs[i].id + '"]');
 
-            if (invalidInputs[i].className.indexOf('has-error') === -1) {
+            if (invalidInputs[i].className.indexOf(PureWizardPage.prototype.errorClass) === -1) {
 
-                invalidInputs[i].className += ' has-error';
-                if (invalidInputLabel && invalidInputLabel.className.indexOf('has-error') === -1) {
-                    invalidInputLabel.className += ' has-error';
+                invalidInputs[i].className += ' ' + PureWizardPage.prototype.errorClass;
+                if (invalidInputLabel && invalidInputLabel.className.indexOf(PureWizardPage.prototype.errorClass) === -1) {
+                    invalidInputLabel.className += ' ' + PureWizardPage.prototype.errorClass;
                 }
                 // If error message and error container exists display error
                 errorMsg = invalidInputs[i].getAttribute('data-error-msg');
@@ -259,15 +262,16 @@
         }
 
         // Clean the errors from valid elements
-        var validElements = this.el.querySelectorAll('.has-error:valid');
+        var cssClass = PureWizardPage.prototype.errorClass ? '.' + PureWizardPage.prototype.errorClass : '';
+        var validElements = this.el.querySelectorAll(cssClass + ':valid');
         for (i = 0; i < validElements.length; i++) {
-            validElements[i].className = validElements[i].className.replace('has-error', '');
+            validElements[i].className = validElements[i].className.replace(PureWizardPage.prototype.errorClass, '');
 
             invalidInputLabel = this.el.querySelector('label[for="' + validElements[i].id + '"]');
             errorMsgContainer = document.getElementById(validElements[i].id + 'Error');
 
             if (invalidInputLabel) {
-                invalidInputLabel.className = invalidInputLabel.className.replace('has-error', '');
+                invalidInputLabel.className = invalidInputLabel.className.replace(PureWizardPage.prototype.errorClass, '');
             }
             if (errorMsgContainer) {
                 errorMsgContainer.innerHTML = '';
@@ -276,22 +280,22 @@
         return containsErrors;
     };
 
-    Page.prototype.getTitle = function () {
+    PureWizardPage.prototype.getTitle = function () {
         return this.el.querySelector('legend').innerHTML;
     };
 
-    Page.prototype.getNext = function () {
+    PureWizardPage.prototype.getNext = function () {
         return this.next;
     };
-    Page.prototype.getPrev = function () {
+    PureWizardPage.prototype.getPrev = function () {
         return this.prev;
     };
 
-    Page.prototype.show = function () {
+    PureWizardPage.prototype.show = function () {
         this.el.style.display = 'inline';
     };
 
-    Page.prototype.hide = function () {
+    PureWizardPage.prototype.hide = function () {
         this.el.style.display = 'none';
     };
 
