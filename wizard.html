@@ -7,7 +7,7 @@
     <style>
 
         .container {
-            margin: 20px;
+            margin: 30px;
         }
 
         .pure-menu {
@@ -29,6 +29,22 @@
 
         textarea {
             resize: vertical; /* user can resize vertically, but width is fixed */
+        }
+
+        legend {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 0.9em;
+        }
+
+        form {
+            background-color: #FAFAFA;
+            border: 1px solid #dddddd;
+            padding: 15px;
+            margin-bottom: 10px;
         }
 
         .custom-restricted-width {
@@ -55,9 +71,18 @@
 <div class="container">
 
     <p>
-        Hi, I'm glad to show you a PureWizard plugin that simply can turn any kind of html form into the
+        Hi, I'm glad to show you a <b>PureWizard</b> plugin that simply can turn any kind of html form into the
         wizard or master or whatever you name this. There is no matter what size form are two steps or more.
     </p>
+
+    <p>Features:</p>
+    <ul>
+        <li>No side libraries required, written in pure javascript</li>
+        <li>Fully customizable. Form complexity depends only from layout</li>
+        <li>Supports amd and common js</li>
+        <li>Native browser validation and custom validation messages</li>
+        <li>Support HTML5 history</li>
+    </ul>
 
     <p>
         Lets see the quick demo how it would be looks like on a simple form.
@@ -70,23 +95,23 @@
             <button id="startSmallWizardAgain" class="pure-button button-secondary button-success">Submit new</button>
         </div>
 
-        <form class="pure-u-3-4 pure-form pure-form-stacked" id="wizardSimple">
+        <form class="pure-u-1-6 pure-form pure-form-stacked" id="wizardSimple">
             <fieldset>
                 <label for="fName">First Name</label>
-                <input name="fName" value="" id="fName" type="text" placeholder="">
+                <input class="pure-u-1" name="fName" value="" id="fName" type="text" placeholder="">
                 <label for="lName">Last Name</label>
-                <input name="lName" value="" id="lName" type="text" placeholder="">
-                <label for="password">Password</label>
-                <input name="password" value="" id="password" type="password" placeholder="">
+                <input class="pure-u-1" name="lName" value="" id="lName" type="text" placeholder="">
+                <label class="pure-u-1" for="password">Password</label>
+                <input class="pure-u-1" name="password" value="" id="password" type="password" placeholder="">
             </fieldset>
 
             <fieldset>
                 <label for="address">Address</label>
-                <input name="address" value="" id="address" type="text" placeholder="">
+                <input class="pure-u-1" name="address" value="" id="address" type="text" placeholder="">
                 <label for="telephone1">Telephone</label>
-                <input name="telephone" value="" id="telephone1" type="text" placeholder="">
+                <input class="pure-u-1" name="telephone" value="" id="telephone1" type="text" placeholder="">
                 <label for="email1">Email</label>
-                <input name="email1" value="" id="email1" type="email" placeholder="">
+                <input class="pure-u-1" name="email1" value="" id="email1" type="email" placeholder="">
             </fieldset>
 
             <fieldset>
@@ -102,7 +127,7 @@
 
             <fieldset>
                 <label for="notes">Notes:</label>
-                <textarea name="notes" id="notes" placeholder=""></textarea>
+                <textarea class="pure-u-1" name="notes" id="notes" placeholder=""></textarea>
                 <label for="agree" class="pure-checkbox">
                     <input name="agree" id="agree" type="checkbox" required>
                     I agree
@@ -116,14 +141,20 @@
             </footer>
         </form>
     </div>
-
+    <hr/>
     <div class="pure-g">
-        <form id="submitWizard" novalidate class="pure-u-3-4 pure-form pure-form-stacked">
+        <p class="pure-u-1">
+            And here is more complex demo:
+        </p>
+
+        <form id="submitWizard" novalidate class="pure-u-17-24 pure-form pure-form-stacked">
             <fieldset id="step1">
                 <legend>Step 1: Product Information</legend>
                 <p>
-                    Product Details - The following fields must include the description of your product exactly as you
-                    wish the final certification to read. Please verify the name before submission.
+                    <em>
+                        Product Details - The following fields must include the description of your product exactly as
+                        you wish the final certification to read. Please verify the name before submission.
+                    </em>
                 </p>
 
                 <label for="productName">Product Name <sup>*</sup> <sup class="has-error has-error-label"
@@ -261,7 +292,8 @@
             </section>
         </div>
     </div>
-    <p>The plugins supports:</p>
+
+    <p>Browser support:</p>
     <ul>
         <li>Chrome</li>
         <li>Firefox</li>
@@ -281,7 +313,6 @@
             liClass: 'pure-menu-item',
             aClass: 'pure-menu-link',
             aActiveClass: 'current-step'
-
         };
 
         var wizardConf = {
