@@ -21,7 +21,9 @@
         this.config.enableHistory = this.config.enableHistory || false;
         this.config.errorClass = this.config.errorClass || 'has-error';
 
+        //TODO: move out from prototype
         PureWizardPage.prototype.errorClass = this.config.errorClass;
+        PureWizardPage.prototype.hideClass = this.config.hideClass;
 
         this.statusSectionId = this.config.statusContainerCfg ? this.config.statusContainerCfg.containerId : null;
         this.pages = [];
@@ -292,11 +294,19 @@
     };
 
     PureWizardPage.prototype.show = function () {
-        this.el.style.display = 'inline';
+        if (this.hideClass) {
+            this.el.className = this.el.className.replace(this.hideClass, '');
+        } else {
+            this.el.style.display = 'inline';
+        }
     };
 
     PureWizardPage.prototype.hide = function () {
-        this.el.style.display = 'none';
+        if (this.hideClass) {
+            this.el.className += ' ' + this.hideClass;
+        } else {
+            this.el.style.display = 'none';
+        }
     };
 
     function WizardSteps(pages, container, config) {

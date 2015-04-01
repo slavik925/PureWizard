@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Wizard</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <link rel="stylesheet" href="http://www.justinaguilar.com/animations/css/animations.css">
     <style>
 
         .container {
@@ -96,7 +97,7 @@
         </div>
 
         <form class="pure-u-1-6 pure-form pure-form-stacked" id="wizardSimple">
-            <fieldset>
+            <fieldset class="pure-u-1">
                 <label for="fName">First Name</label>
                 <input class="pure-u-1" name="fName" value="" id="fName" type="text" placeholder="">
                 <label for="lName">Last Name</label>
@@ -105,7 +106,7 @@
                 <input class="pure-u-1" name="password" value="" id="password" type="password" placeholder="">
             </fieldset>
 
-            <fieldset>
+            <fieldset class="pure-u-1">
                 <label for="address">Address</label>
                 <input class="pure-u-1" name="address" value="" id="address" type="text" placeholder="">
                 <label for="telephone1">Telephone</label>
@@ -114,7 +115,7 @@
                 <input class="pure-u-1" name="email1" value="" id="email1" type="email" placeholder="">
             </fieldset>
 
-            <fieldset>
+            <fieldset class="pure-u-1">
                 <label for="sexf" class="pure-radio">
                     <input id="sexf" type="radio" name="sex" value="option2">
                     Male
@@ -125,7 +126,7 @@
                 </label>
             </fieldset>
 
-            <fieldset>
+            <fieldset class="pure-u-1">
                 <label for="notes">Notes:</label>
                 <textarea class="pure-u-1" name="notes" id="notes" placeholder=""></textarea>
                 <label for="agree" class="pure-checkbox">
@@ -141,6 +142,7 @@
             </footer>
         </form>
     </div>
+    <!--<button id="animationToggle">Toggle animation</button>-->
     <hr/>
     <div class="pure-g">
         <p class="pure-u-1">
@@ -293,6 +295,82 @@
         </div>
     </div>
 
+    <table class="pure-table pure-table-striped">
+        <caption>Main Wizard Config Object</caption>
+        <tbody>
+        <tr>
+            <td>containerId (required)</td>
+            <td>Id of form with will be a wizard</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>enableHistory</td>
+            <td>Enable HTML 5 history</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>errorClass</td>
+            <td>Class to highlight error element</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>hideNextPrevButtons</td>
+            <td>By Default next and previous buttons are disable if anavailible</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>statusContainerCfg</td>
+            <td>Configuration of status container section</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="pure-table pure-table-striped">
+        <caption>Status container config object</caption>
+        <tbody>
+        <tr>
+            <td>containerId (required)</td>
+            <td>Id of form with will be a status container</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>ulClass</td>
+            <td>Enable HTML 5 history</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>liClass</td>
+            <td>Class to highlight error element</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>aClass</td>
+            <td>By Default next and previous buttons are disable if anavailible</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>aActiveClass</td>
+            <td>Configuration of status container section</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="pure-table pure-table-striped">
+        <caption>Callbacks</caption>
+        <tbody>
+        <tr>
+            <td>onPageChanged</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>onSubmit</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
     <p>Browser support:</p>
     <ul>
         <li>Chrome</li>
@@ -332,6 +410,10 @@
             containerId: 'wizardSimple',
             hideNextPrevButtons: true
         });
+
+//        document.getElementById('animationToggle').addEventListener('click', function(){
+//            wizardSimple.setHideClass('slideUp');
+//        });
 
         wizardSimple.onSubmit(function (e) {
             document.forms['wizardSimple'].reset();
