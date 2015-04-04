@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <title>Wizard</title>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
-    <link rel="stylesheet" href="http://www.justinaguilar.com/animations/css/animations.css">
     <style>
 
         .container {
@@ -142,7 +141,6 @@
             </footer>
         </form>
     </div>
-    <!--<button id="animationToggle">Toggle animation</button>-->
     <hr/>
     <div class="pure-g">
         <p class="pure-u-1">
@@ -410,10 +408,6 @@
             containerId: 'wizardSimple',
             hideNextPrevButtons: true
         });
-
-//        document.getElementById('animationToggle').addEventListener('click', function(){
-//            wizardSimple.setHideClass('slideUp');
-//        });
 
         wizardSimple.onSubmit(function (e) {
             document.forms['wizardSimple'].reset();

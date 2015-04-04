@@ -21,10 +21,6 @@
         this.config.enableHistory = this.config.enableHistory || false;
         this.config.errorClass = this.config.errorClass || 'has-error';
 
-        //TODO: move out from prototype
-        PureWizardPage.prototype.errorClass = this.config.errorClass;
-        PureWizardPage.prototype.hideClass = this.config.hideClass;
-
         this.statusSectionId = this.config.statusContainerCfg ? this.config.statusContainerCfg.containerId : null;
         this.pages = [];
         this.current = null;
@@ -46,17 +42,16 @@
             if (node.tagName.toLowerCase() === 'fieldset') {
                 // Set the first page as current
                 if (this.pages.length === 0) {
-                    this.pages.push(new PureWizardPage(node));
+                    this.pages.push(new PureWizardPage(this.config, node));
                     this.current = this.pages[0];
                 } else {
                     var prev = this.pages[this.pages.length - 1];
-                    var newPage = new PureWizardPage(node, prev);
+                    var newPage = new PureWizardPage(this.config, node, prev);
                     this.pages.push(newPage);
                     prev.next = newPage;
                 }
             }
         }
-
 
         //Initialize status section if property is given
         if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
@@ -225,10 +220,11 @@
         }
     };
 
-    function PureWizardPage(container, prev, next) {
+    function PureWizardPage(config, container, prev, next) {
         this.el = container;
         this.prev = prev || null;
         this.next = next || null;
+        this.config = config;
     }
 
     PureWizardPage.prototype.getInvalidElements = function () {
@@ -238,7 +234,7 @@
     PureWizardPage.prototype.isValid = function () {
         return this.getInvalidElements().length === 0;
     };
-
+    
     PureWizardPage.prototype.isContainsError = function () {
         var invalidInputs = this.getInvalidElements(),
             containsErrors = false,
@@ -247,11 +243,11 @@
         for (i = 0; i < invalidInputs.length; i++) {
             invalidInputLabel = this.el.querySelector('label[for="' + invalidInputs[i].id + '"]');
 
-            if (invalidInputs[i].className.indexOf(PureWizardPage.prototype.errorClass) === -1) {
+            if (invalidInputs[i].className.indexOf(this.config.errorClass) === -1) {
 
-                invalidInputs[i].className += ' ' + PureWizardPage.prototype.errorClass;
-                if (invalidInputLabel && invalidInputLabel.className.indexOf(PureWizardPage.prototype.errorClass) === -1) {
-                    invalidInputLabel.className += ' ' + PureWizardPage.prototype.errorClass;
+                invalidInputs[i].className += ' ' + this.config.errorClass;
+                if (invalidInputLabel && invalidInputLabel.className.indexOf(this.config.errorClass) === -1) {
+                    invalidInputLabel.className += ' ' + this.config.errorClass;
                 }
                 // If error message and error container exists display error
                 errorMsg = invalidInputs[i].getAttribute('data-error-msg');
@@ -264,16 +260,16 @@
         }
 
         // Clean the errors from valid elements
-        var cssClass = PureWizardPage.prototype.errorClass ? '.' + PureWizardPage.prototype.errorClass : '';
+        var cssClass = this.config.errorClass ? '.' + this.config.errorClass : '';
         var validElements = this.el.querySelectorAll(cssClass + ':valid');
         for (i = 0; i < validElements.length; i++) {
-            validElements[i].className = validElements[i].className.replace(PureWizardPage.prototype.errorClass, '');
+            validElements[i].className = validElements[i].className.replace(this.config.errorClass, '');
 
             invalidInputLabel = this.el.querySelector('label[for="' + validElements[i].id + '"]');
             errorMsgContainer = document.getElementById(validElements[i].id + 'Error');
 
             if (invalidInputLabel) {
-                invalidInputLabel.className = invalidInputLabel.className.replace(PureWizardPage.prototype.errorClass, '');
+                invalidInputLabel.className = invalidInputLabel.className.replace(this.config.errorClass, '');
             }
             if (errorMsgContainer) {
                 errorMsgContainer.innerHTML = '';
@@ -294,16 +290,16 @@
     };
 
     PureWizardPage.prototype.show = function () {
-        if (this.hideClass) {
-            this.el.className = this.el.className.replace(this.hideClass, '');
+        if (this.config.hideClass) {
+            this.el.className = this.el.className.replace(this.config.hideClass, '');
         } else {
             this.el.style.display = 'inline';
         }
     };
 
     PureWizardPage.prototype.hide = function () {
-        if (this.hideClass) {
-            this.el.className += ' ' + this.hideClass;
+        if (this.config.hideClass) {
+            this.el.className += ' ' + this.config.hideClass;
         } else {
             this.el.style.display = 'none';
         }
