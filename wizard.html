@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Wizard</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.6.0/pure-min.css">
+    <style>
+
+        .container {
+            margin: 30px;
+        }
+
+        .pure-menu {
+            padding-left: 10px;
+        }
+
+        .has-error {
+            color: #b94a48;
+            border-color: #e9322d !important;
+        }
+
+        .current-step {
+            font-weight: bold;
+        }
+
+        input[type=date] {
+            height: 35px;
+        }
+
+        textarea {
+            resize: vertical; /* user can resize vertically, but width is fixed */
+        }
+
+        legend {
+            font-size: 1.2em;
+            font-weight: bold;
+        }
+
+        label {
+            font-size: 0.9em;
+        }
+
+        form {
+            background-color: #FAFAFA;
+            border: 1px solid #dddddd;
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+
+        .custom-restricted-width {
+            /* To limit the menu width to the content of the menu: */
+            display: inline-block;
+            /* Or set the width explicitly: */
+            /* width: 10em; */
+        }
+
+        .button-success,
+        .button-secondary {
+            color: white;
+            border-radius: 4px;
+            text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+        }
+
+        .button-success {
+            background: rgb(28, 184, 65); /* this is a green */
+        }
+
+    </style>
+</head>
+<body>
+<div class="container">
+
+    <p>
+        It's a <b>PureWizard</b> plugin that simply can turn any kind of html form into the
+        wizard or master or whatever you name this. There is no matter what size the form is. It could be just two steps or ten.
+    </p>
+
+    <p>Here is the list of the main features:</p>
+    <ul>
+        <li>No side libraries required, written in pure javascript.</li>
+        <li>Fully customizable. Form complexity depends only from layout.</li>
+        <li>Supports AMD and common js</li>
+        <li>Native browser validation and custom validation messages.</li>
+        <li>Support HTML5 history</li>
+    </ul>
+
+    <p>
+        Lets see the quick demo how it would be looks like on a simple form.
+    </p>
+
+    <div class="pure-g">
+
+        <div class="pure-u-1" id="smallWizardOnComplete">
+            <p>Submission complete!</p>
+            <button id="startSmallWizardAgain" class="pure-button button-secondary button-success">Submit new</button>
+        </div>
+
+        <form class="pure-u-1-6 pure-form pure-form-stacked" id="wizardSimple">
+            <fieldset class="pure-u-1">
+                <label for="fName">First Name</label>
+                <input class="pure-u-1" name="fName" value="" id="fName" type="text" placeholder="">
+                <label for="lName">Last Name</label>
+                <input class="pure-u-1" name="lName" value="" id="lName" type="text" placeholder="">
+                <label class="pure-u-1" for="password">Password</label>
+                <input class="pure-u-1" name="password" value="" id="password" type="password" placeholder="">
+            </fieldset>
+
+            <fieldset class="pure-u-1">
+                <label for="address">Address</label>
+                <input class="pure-u-1" name="address" value="" id="address" type="text" placeholder="">
+                <label for="telephone1">Telephone</label>
+                <input class="pure-u-1" name="telephone" value="" id="telephone1" type="text" placeholder="">
+                <label for="email1">Email</label>
+                <input class="pure-u-1" name="email1" value="" id="email1" type="email" placeholder="">
+            </fieldset>
+
+            <fieldset class="pure-u-1">
+                <label for="sexf" class="pure-radio">
+                    <input id="sexf" type="radio" name="sex" value="option2">
+                    Male
+                </label>
+                <label for="sexm" class="pure-radio">
+                    <input id="sexm" type="radio" name="sex" value="option2">
+                    Female
+                </label>
+            </fieldset>
+
+            <fieldset class="pure-u-1">
+                <label for="notes">Notes:</label>
+                <textarea class="pure-u-1" name="notes" id="notes" placeholder=""></textarea>
+                <label for="agree" class="pure-checkbox">
+                    <input name="agree" id="agree" type="checkbox" required>
+                    I agree
+                </label>
+            </fieldset>
+
+            <footer>
+                <button class="pwPrev pure-button">Prev</button>
+                <button class="pwNext pure-button">Next</button>
+                <button class="pwFinish pure-button pure-button-primary">Finish</button>
+            </footer>
+        </form>
+    </div>
+    <hr/>
+    <div class="pure-g">
+        <p class="pure-u-1">
+            And here is more complex demo:
+        </p>
+
+        <form id="submitWizard" novalidate class="pure-u-17-24 pure-form pure-form-stacked">
+            <fieldset id="step1">
+                <legend>Step 1: Product Information</legend>
+                <p>
+                    <em>
+                        Product Details - The following fields must include the description of your product exactly as
+                        you wish the final certification to read. Please verify the name before submission.
+                    </em>
+                </p>
+
+                <label for="productName">Product Name <sup>*</sup> <sup class="has-error has-error-label"
+                                                                        id="productNameError"></sup></label>
+                <input name="productName" data-error-msg="This field is required!" required class="pure-u-1" value=""
+                       id="productName" type="text"
+                       placeholder="">
+
+                <div class="pure-g">
+                    <div class="pure-u-1-2">
+                        <label for="modelNumber">Model Number <sup>*</sup> <sup class="has-error has-error-label"
+                                                                                id="modelNumberError"></sup></label>
+                        <input name="modelNumber" required data-error-msg="Should be between 0 and 100"
+                               class="pure-u-23-24"
+                               id="modelNumber" type="number" max="100"
+                               min="0"/>
+                    </div>
+                    <div class="pure-u-1-2">
+                        <label for="url">Product URL</label>
+                        <input name="url" class="pure-u-1" id="url" type="url"/>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <div class="pure-g">
+                            <div class="pure-u-1-2">
+                                <label for="email">Email</label>
+                                <input name="email" data-error-msg="Invalid email" class="pure-u-22-24" id="email"
+                                       type="email"/>
+                            </div>
+                            <div class="pure-u-1-2">
+                                <label for="telephone">Telephone</label>
+                                <input name="telephone" class="pure-u-22-24" id="telephone" type="tel"/>
+                            </div>
+                            <div class="pure-u-1-2">
+                                <label for="custom1">Custom 1</label>
+                                <input name="custom1" class="pure-u-22-24" id="custom1" type="email"/>
+                            </div>
+                            <div class="pure-u-1-2">
+                                <label for="custom2">Custom 2</label>
+                                <input name="custom2" class="pure-u-22-24" id="custom2" type="tel"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <div class="pure-g">
+                            <div class="pure-u-1-4">
+                                <label for="publishOnDate">Publish On Date</label>
+                                <select id="publishOnDate">
+                                    <option>Now</option>
+                                    <option>Date</option>
+                                    <option>No</option>
+                                </select>
+                            </div>
+                            <div class="pure-u-3-4">
+                                <label for="publishOnDateValue">&nbsp;</label>
+                                <input id="publishOnDateValue" name="publishOnDateValue" type="date"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <label for="otherNotes">Other notes</label>
+                        <textarea id="otherNotes" name="otherNotes" class="pure-u-23-24"></textarea>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <label for="productLogo">Choose product logo</label>
+                        <input class="pure-u-1" name="productLogo" id="productLogo" type="file"/>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset id="step2">
+                <legend>Step 2: Product Category</legend>
+                <p>Product Category - The following fields must include the description of your product exactly as you
+                    wish the final certification to read. Please verify the name before submission.</p>
+
+                <div class="pure-g">
+                    <div class="pure-u-1-2">
+                        <label for="productCategory">Product Category</label>
+                        <select class="pure-u-22-24" name="productCategory" id="productCategory" required>
+                            <option value="">Select category</option>
+                            <option>AL</option>
+                            <option>CA</option>
+                            <option>IL</option>
+                        </select>
+                    </div>
+                    <div class="pure-u-1-2">
+                        <label for="productCategorySecond">Product Second Category</label>
+                        <select class="pure-u-23-24" name="productCategorySecond" id="productCategorySecond">
+                            <option value="-1">Select second category</option>
+                            <option>AL</option>
+                            <option>CA</option>
+                            <option>IL</option>
+                        </select>
+                    </div>
+                </div>
+                <label for="option1" class="pure-checkbox">
+                    <input name="option1" id="option1" type="checkbox" required>
+                    Additional Options 1
+                </label>
+                <label for="option2" class="pure-checkbox">
+                    <input name="option2" id="option2" type="checkbox"/>
+                    Additional Options 2
+                </label>
+
+            </fieldset>
+            <fieldset id="step3">
+                <legend>Step 3: Product Options</legend>
+
+                <label for="option-two" class="pure-radio">
+                    <input id="option-two" type="radio" name="optionsRadios" value="option1" required>
+                    Here's a radio button. You can choose this one..
+                </label>
+
+                <label for="option-three" class="pure-radio">
+                    <input id="option-three" type="radio" name="optionsRadios" value="option2" required>
+                    ..Or this one!
+                </label>
+
+                <label for="cb" class="pure-checkbox">
+                    <input id="cb" required type="checkbox"> I've read the terms and conditions
+                </label>
+
+            </fieldset>
+            <footer>
+                <button class="pure-button pwPrev">Prev</button>
+                <button class="pure-button pwNext">Next</button>
+                <button class="pure-button pure-button-primary pwFinish">Finish</button>
+            </footer>
+        </form>
+        <div class="pure-menu custom-restricted-width pure-u-1-4">
+            <span class="pure-menu-heading">Wizard Steps</span>
+            <section id="wizardStatusContainer">
+            </section>
+        </div>
+    </div>
+
+    <table class="pure-table pure-table-striped">
+        <caption>Main Wizard Config Object</caption>
+        <tbody>
+        <tr>
+            <td>containerId (required)</td>
+            <td>Id of form with will be a wizard</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>enableHistory</td>
+            <td>Enable HTML 5 history</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>errorClass</td>
+            <td>Class to highlight error element</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>hideNextPrevButtons</td>
+            <td>By Default next and previous buttons are disable if anavailible</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>statusContainerCfg</td>
+            <td>Configuration of status container section</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="pure-table pure-table-striped">
+        <caption>Status container config object</caption>
+        <tbody>
+        <tr>
+            <td>containerId (required)</td>
+            <td>Id of form with will be a status container</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>ulClass</td>
+            <td>Enable HTML 5 history</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>liClass</td>
+            <td>Class to highlight error element</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>aClass</td>
+            <td>By Default next and previous buttons are disable if anavailible</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>aActiveClass</td>
+            <td>Configuration of status container section</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="pure-table pure-table-striped">
+        <caption>Callbacks</caption>
+        <tbody>
+        <tr>
+            <td>onPageChanged</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>onSubmit</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <p>Browser support:</p>
+    <ul>
+        <li>Chrome</li>
+        <li>Firefox</li>
+        <li>Opera 11.50</li>
+        <li>Safari 6.0</li>
+        <li>IE 10</li>
+    </ul>
+</div>
+</body>
+<script src="pureWizard.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        var WizardStatusContainerConfig = {
+            containerId: 'wizardStatusContainer',
+            ulClass: 'pure-menu-list',
+            liClass: 'pure-menu-item',
+            aClass: 'pure-menu-link',
+            aActiveClass: 'current-step'
+        };
+
+        var wizardConf = {
+            containerId: 'submitWizard',
+            statusContainerCfg: WizardStatusContainerConfig,
+            enableHistory: true,
+            errorClass: 'has-error'
+        };
+
+        var wizard = new PureWizard(wizardConf);
+
+        wizard.onPageChanged(function (e) {
+            console.log('Changed page from ' + e.detail.pageBefore + ' to ' + e.detail.pageAfter);
+        });
+
+        var wizardSimple = new PureWizard({
+            containerId: 'wizardSimple',
+            hideNextPrevButtons: true
+        });
+
+        wizardSimple.onSubmit(function (e) {
+            document.forms['wizardSimple'].reset();
+            document.getElementById('wizardSimple').style.display = 'none';
+            document.getElementById('smallWizardOnComplete').style.display = 'block';
+        });
+
+        document.getElementById('smallWizardOnComplete').style.display = 'none';
+        document.getElementById('startSmallWizardAgain').addEventListener('click', function (e) {
+            document.getElementById('smallWizardOnComplete').style.display = 'none';
+            document.getElementById('wizardSimple').style.display = 'block';
+        });
+    });
+</script>
+</html>
