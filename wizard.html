@@ -340,7 +340,7 @@
         var wizardConf = {
             containerId: 'submitWizard',
             statusContainerCfg: WizardStatusContainerConfig,
-            enableHistory: true,
+            enableHistory: false,
             errorClass: 'has-error'
         };
 
@@ -352,7 +352,8 @@
 
         var wizardSimple = new PureWizard({
             containerId: 'wizardSimple',
-            hideNextPrevButtons: true
+            hideNextPrevButtons: true,
+            enableHistory: false
         });
 
         wizardSimple.onSubmit(function (e) {
