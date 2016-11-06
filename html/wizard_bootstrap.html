@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Wizard Bootstrap</title>
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+</head>
+<body>
+<div class="container">
+
+    <p>
+        Simple form DEMO
+    </p>
+
+    <div class="col-md-12">
+
+        <div class="pure-u-1" id="smallWizardOnComplete">
+            <p>Submission complete!</p>
+            <button id="startSmallWizardAgain" class="btn btn-primary button-secondary button-success">Submit new</button>
+        </div>
+
+        <form class="form" id="wizardSimple">
+            <fieldset>
+                <div class="form-group">
+                    <label for="fName">First Name</label>
+                    <input class="form-control" name="fName" value="" id="fName" type="text" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="lName">Last Name</label>
+                    <input class="form-control" name="lName" value="" id="lName" type="text" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input class="form-control" name="password" value="" id="password" type="password" placeholder="">
+                </div>
+            </fieldset>
+
+            <fieldset class="form-inline">
+                <div class="form-group">
+                    <label for="address">Address</label>
+                    <input class="form-control" name="address" value="" id="address" type="text" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="telephone1">Telephone</label>
+                    <input class="form-control" name="telephone" value="" id="telephone1" type="text" placeholder="">
+                </div>
+                <div class="form-group">
+                    <label for="email1">Email</label>
+                    <input class="form-control" name="email1" value="" id="email1" type="email" placeholder="">
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <div class="radio">
+                    <label for="sexf" class="pure-radio">
+                        <input id="sexf" type="radio" name="sex" value="option2">
+                        Male
+                    </label>
+                </div>
+                <div class="radio">
+                    <label for="sexm" class="pure-radio">
+                        <input id="sexm" type="radio" name="sex" value="option2">
+                        Female
+                    </label>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <div class="form-group">
+                    <label for="notes">Notes:</label>
+                    <textarea class="form-control" name="notes" id="notes" placeholder=""></textarea>
+                </div>
+                
+                <div class="checkbox">
+                    <label for="agree" class="pure-checkbox">
+                        <input name="agree" id="agree" type="checkbox" required>
+                        I agree
+                    </label>
+                </div>
+            </fieldset>
+
+            <footer>
+                <button class="pwPrev btn btn-default">Prev</button>
+                <button class="pwNext btn btn-primary">Next</button>
+                <button class="pwFinish btn btn-success">Finish</button>
+            </footer>
+        </form>
+    </div>
+    <hr/>
+    
+    <p>
+        Complex form DEMO:
+    </p>
+    
+    <div class="col-md-12">
+        <form id="submitWizard" novalidate class="pure-u-17-24 pure-form pure-form-stacked">
+            <fieldset id="step1">
+                <legend>Step 1: Product Information</legend>
+                <p>
+                    <em>
+                        Product Details - The following fields must include the description of your product exactly as
+                        you wish the final certification to read. Please verify the name before submission.
+                    </em>
+                </p>
+
+                <label for="productName">Product Name <sup>*</sup> <sup class="has-error has-error-label"
+                                                                        id="productNameError"></sup></label>
+                <input name="productName" data-error-msg="This field is required!" required class="pure-u-1" value=""
+                       id="productName" type="text"
+                       placeholder="">
+
+                <div class="pure-g">
+                    <div class="pure-u-1-2">
+                        <label for="modelNumber">Model Number <sup>*</sup> <sup class="has-error has-error-label"
+                                                                                id="modelNumberError"></sup></label>
+                        <input name="modelNumber" required data-error-msg="Should be between 0 and 100"
+                               class="pure-u-23-24"
+                               id="modelNumber" type="number" max="100"
+                               min="0"/>
+                    </div>
+                    <div class="pure-u-1-2">
+                        <label for="url">Product URL</label>
+                        <input name="url" class="pure-u-1" id="url" type="url"/>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <div class="pure-g">
+                            <div class="pure-u-1-2">
+                                <label for="email">Email</label>
+                                <input name="email" data-error-msg="Invalid email" class="pure-u-22-24" id="email"
+                                       type="email"/>
+                            </div>
+                            <div class="pure-u-1-2">
+                                <label for="telephone">Telephone</label>
+                                <input name="telephone" class="pure-u-22-24" id="telephone" type="tel"/>
+                            </div>
+                            <div class="pure-u-1-2">
+                                <label for="custom1">Custom 1</label>
+                                <input name="custom1" class="pure-u-22-24" id="custom1" type="email"/>
+                            </div>
+                            <div class="pure-u-1-2">
+                                <label for="custom2">Custom 2</label>
+                                <input name="custom2" class="pure-u-22-24" id="custom2" type="tel"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <div class="pure-g">
+                            <div class="pure-u-1-4">
+                                <label for="publishOnDate">Publish On Date</label>
+                                <select id="publishOnDate">
+                                    <option>Now</option>
+                                    <option>Date</option>
+                                    <option>No</option>
+                                </select>
+                            </div>
+                            <div class="pure-u-3-4">
+                                <label for="publishOnDateValue">&nbsp;</label>
+                                <input id="publishOnDateValue" name="publishOnDateValue" type="date"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <label for="otherNotes">Other notes</label>
+                        <textarea id="otherNotes" name="otherNotes" class="pure-u-23-24"></textarea>
+                    </div>
+
+                    <div class="pure-u-1-2">
+                        <label for="productLogo">Choose product logo</label>
+                        <input class="pure-u-1" name="productLogo" id="productLogo" type="file"/>
+                    </div>
+                </div>
+            </fieldset>
+            <fieldset id="step2">
+                <legend>Step 2: Product Category</legend>
+                <p>Product Category - The following fields must include the description of your product exactly as you
+                    wish the final certification to read. Please verify the name before submission.</p>
+
+                <div class="pure-g">
+                    <div class="pure-u-1-2">
+                        <label for="productCategory">Product Category</label>
+                        <select class="pure-u-22-24" name="productCategory" id="productCategory" required>
+                            <option value="">Select category</option>
+                            <option>AL</option>
+                            <option>CA</option>
+                            <option>IL</option>
+                        </select>
+                    </div>
+                    <div class="pure-u-1-2">
+                        <label for="productCategorySecond">Product Second Category</label>
+                        <select class="pure-u-23-24" name="productCategorySecond" id="productCategorySecond">
+                            <option value="-1">Select second category</option>
+                            <option>AL</option>
+                            <option>CA</option>
+                            <option>IL</option>
+                        </select>
+                    </div>
+                </div>
+                <label for="option1" class="pure-checkbox">
+                    <input name="option1" id="option1" type="checkbox" required>
+                    Additional Options 1
+                </label>
+                <label for="option2" class="pure-checkbox">
+                    <input name="option2" id="option2" type="checkbox"/>
+                    Additional Options 2
+                </label>
+
+            </fieldset>
+            <fieldset id="step3">
+                <legend>Step 3: Product Options</legend>
+
+                <label for="option-two" class="pure-radio">
+                    <input id="option-two" type="radio" name="optionsRadios" value="option1" required>
+                    Here's a radio button. You can choose this one..
+                </label>
+
+                <label for="option-three" class="pure-radio">
+                    <input id="option-three" type="radio" name="optionsRadios" value="option2" required>
+                    ..Or this one!
+                </label>
+
+                <label for="cb" class="pure-checkbox">
+                    <input id="cb" required type="checkbox"> I've read the terms and conditions
+                </label>
+
+            </fieldset>
+            <footer>
+                <button class="btn btn-primary pwPrev">Prev</button>
+                <button class="btn btn-default pwNext">Next</button>
+                <button class="btn btn-success pwFinish">Finish</button>
+            </footer>
+        </form>
+        <div class="pure-menu custom-restricted-width pure-u-1-4">
+            <span class="pure-menu-heading">Wizard Steps</span>
+            <section id="wizardStatusContainer">
+            </section>
+        </div>
+    </div>
+
+    <table class="pure-table pure-table-striped">
+        <caption>Status container config object</caption>
+        <tbody>
+        <tr>
+            <td>containerId (required)</td>
+            <td>Id of form with will be a status container</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>ulClass</td>
+            <td>Enable HTML 5 history</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>liClass</td>
+            <td>Class to highlight error element</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>aClass</td>
+            <td>By Default next and previous buttons are disable if anavailible</td>
+            <td>Default: false</td>
+        </tr>
+        <tr>
+            <td>aActiveClass</td>
+            <td>Configuration of status container section</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <table class="pure-table pure-table-striped">
+        <caption>Callbacks</caption>
+        <tbody>
+        <tr>
+            <td>onPageChanged</td>
+            <td></td>
+        </tr>
+        <tr>
+            <td>onSubmit</td>
+            <td></td>
+        </tr>
+        </tbody>
+    </table>
+
+</div>
+<script src="../js/pureWizard.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        //TODO: prepare for most popular css frameworks
+        var WizardStatusContainerConfig = {
+            containerId: 'wizardStatusContainer',
+            ulClass: 'pure-menu-list',
+            liClass: 'pure-menu-item',
+            aClass: 'pure-menu-link',
+            aActiveClass: 'current-step'
+        };
+
+        var wizardConf = {
+            wizardNodeId: 'submitWizard',
+            statusContainerCfg: WizardStatusContainerConfig,
+            enableHistory: false,
+            errorClass: 'has-error'
+        };
+
+        var wizard = new PureWizard(wizardConf);
+
+        wizard.onPageChanged(function (e) {
+            console.log('Changed page from ' + e.detail.pageBefore + ' to ' + e.detail.pageAfter);
+        });
+
+        var wizardSimple = new PureWizard({
+            wizardNodeId: 'wizardSimple',
+            hideNextPrevButtons: true,
+            enableHistory: false
+        });
+
+        wizardSimple.onSubmit(function (e) {
+            document.forms['wizardSimple'].reset();
+            document.getElementById('wizardSimple').style.display = 'none';
+            document.getElementById('smallWizardOnComplete').style.display = 'block';
+        });
+
+        document.getElementById('smallWizardOnComplete').style.display = 'none';
+        document.getElementById('startSmallWizardAgain').addEventListener('click', function (e) {
+            document.getElementById('smallWizardOnComplete').style.display = 'none';
+            document.getElementById('wizardSimple').style.display = 'block';
+        });
+    });
+</script>
+</body>
+</html>
