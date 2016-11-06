@@ -12,7 +12,21 @@
         root.PureWizard = factory();
     }
 }(this, function () {
-
+    
+    /**
+     * Creates a wizard instance
+     * @class
+     * 
+     * @constructor
+     * 
+     * @property {object}  config                - The defaults values for wizard config
+     * @property {boolean} config.enableHistory  - Enable html5 history navigation
+     * @property {string}  config.errorClass     - Class name that would apply on field error
+     * @property {string}  config.wizardNodeId    - Id of main section that contains wizard
+     * @property {boolean} config.hideNextPrevButtons - If true when hide buttons if no steps back/forward and if false disables them
+     * @property {object} WizardStatusContainerConfig - Optional config allows to configure more deelply.
+     * 
+     */
     function PureWizard(config) {
 
         var self = this;
@@ -25,7 +39,7 @@
         this.pages = [];
         this.current = null;
         this.currentIndex = 0;
-        this.form = document.getElementById(this.config.containerId);
+        this.form = document.getElementById(this.config.wizardNodeId);
 
         this.buttons = {
             next: this.form.querySelector('footer > .pwNext'),

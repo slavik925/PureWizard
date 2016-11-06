@@ -329,6 +329,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
 
+        //TODO: prepare for most popular css frameworks
         var WizardStatusContainerConfig = {
             containerId: 'wizardStatusContainer',
             ulClass: 'pure-menu-list',
@@ -338,7 +339,7 @@
         };
 
         var wizardConf = {
-            containerId: 'submitWizard',
+            wizardNodeId: 'submitWizard',
             statusContainerCfg: WizardStatusContainerConfig,
             enableHistory: false,
             errorClass: 'has-error'
@@ -351,7 +352,7 @@
         });
 
         var wizardSimple = new PureWizard({
-            containerId: 'wizardSimple',
+            wizardNodeId: 'wizardSimple',
             hideNextPrevButtons: true,
             enableHistory: false
         });
