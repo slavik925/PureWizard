@@ -1,4 +1,7 @@
 (function (root, factory) {
+    
+    'use strict';
+
     if (typeof define === 'function' && define.amd) {
         // AMD. Register as an anonymous module.
         define([], factory);
@@ -12,25 +15,27 @@
         root.PureWizard = factory();
     }
 }(this, function () {
+
+    'use strict';
     
     /**
      * Creates a wizard instance
      * @class
-     * 
      * @constructor
      * 
-     * @property {object}  config                - The defaults values for wizard config
-     * @property {boolean} config.enableHistory  - Enable html5 history navigation
-     * @property {string}  config.errorClass     - Class name that would apply on field error
-     * @property {string}  config.wizardNodeId    - Id of main section that contains wizard
-     * @property {boolean} config.hideNextPrevButtons - If true when hide buttons if no steps back/forward and if false disables them
-     * @property {object} WizardStatusContainerConfig - Optional config allows to configure more deelply.
+     * @property {Object}  config                     - The defaults values for wizard config
+     * @property {Boolean} config.enableHistory       - Enable html5 history navigation
+     * @property {String}  config.errorClass          - Class name that would apply on field error
+     * @property {String}  config.wizardNodeId        - Id of main section that contains wizard
+     * @property {Boolean} config.hideNextPrevButtons - If true when hide buttons if no steps back/forward and if false disables them
+     * @property {Object}  config.statusContainerCfg  - Allo to configure a status panel
      * 
      */
     function PureWizard(config) {
 
         var self = this;
 
+        // TODO: split by 1. features, 2. Stylish, 3. Init function to setup properties
         this.config = config || {};
         this.config.enableHistory = this.config.enableHistory || false;
         this.config.errorClass = this.config.errorClass || 'has-error';
@@ -42,45 +47,17 @@
         this.form = document.getElementById(this.config.wizardNodeId);
 
         this.buttons = {
-            next: this.form.querySelector('footer > .pwNext'),
-            prev: this.form.querySelector('footer > .pwPrev'),
-            finish: this.form.querySelector('footer > .pwFinish')
+            next: this.form.querySelector('.pwNext'),
+            prev: this.form.querySelector('.pwPrev'),
+            finish: this.form.querySelector('.pwFinish')
         };
 
         var fieldsets = this.form.children,
             i, node;
 
-        // Divide form on pages by the fieldsets
-        for (i = 0; i < fieldsets.length; i++) {
-            node = fieldsets[i];
-            if (node.tagName.toLowerCase() === 'fieldset') {
-                // Set the first page as current
-                if (this.pages.length === 0) {
-                    this.pages.push(new PureWizardPage(this.config, node));
-                    this.current = this.pages[0];
-                } else {
-                    var prev = this.pages[this.pages.length - 1];
-                    var newPage = new PureWizardPage(this.config, node, prev);
-                    this.pages.push(newPage);
-                    prev.next = newPage;
-                }
-            }
-        }
-
-        //Initialize status section if property is given
+        divideIntoPages();
         if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
-
-            var statusSectionContainer = document.getElementById(this.statusSectionId);
-            this.statusSection = new WizardSteps(this.pages, statusSectionContainer, this.config.statusContainerCfg);
-
-            statusSectionContainer.addEventListener('click', function (e) {
-                e.preventDefault();
-                var link = e.target;
-                if (link.tagName.toLocaleLowerCase() === 'a') {
-                    var pageNumber = Number(link.attributes['data-step'].value);
-                    self.goToPage(self.pages[pageNumber], pageNumber);
-                }
-            });
+            initStatusSection();        
         }
 
         // Hide all pages at start
@@ -91,12 +68,10 @@
         // Then show first page
         if (this.pages.length > 0) {
             this.current.show();
-            if (this.statusSection) {
-                this.statusSection.setStep(0);
-            }
             this.toggleButtons();
         }
 
+        // TODO: test here
         if (this.config.enableHistory) {
             window.addEventListener('popstate', function (e) {
                 if (e.state) {
@@ -130,9 +105,45 @@
         this.form.addEventListener('reset', function (e) {
             self.goToPageByNumber(0);
         });
+
+        function divideIntoPages() {
+            for (i = 0; i < fieldsets.length; i++) {
+                node = fieldsets[i];
+                if (node.tagName.toLowerCase() === 'fieldset') {
+                    // Set the first page as current
+                    if (self.pages.length === 0) {
+                        self.pages.push(new PureWizardPage(self.config, node));
+                        self.current = self.pages[0];
+                    } else {
+                        var prev = self.pages[self.pages.length - 1];
+                        var newPage = new PureWizardPage(self.config, node, prev);
+                        self.pages.push(newPage);
+                        prev.next = newPage;
+                    }
+                }
+            }
+        }  
+
+        function initStatusSection() {
+            var statusSectionContainer = document.getElementById(self.statusSectionId);
+            self.statusSection = new WizardSteps(self.pages, statusSectionContainer, self.config.statusContainerCfg);
+
+            statusSectionContainer.addEventListener('click', function (e) {
+                e.preventDefault();
+                var link = e.target;
+                if (link.tagName.toLocaleLowerCase() === 'a') {
+                    var pageNumber = Number(link.attributes['data-step'].value);
+                    self.goToPage(self.pages[pageNumber], pageNumber);
+                }
+            });
+        }
     }
 
-    PureWizard.prototype.next = function () {
+    /**
+     * Move to next page if present
+     * @function
+     */
+    PureWizard.prototype.next = function PureWizard_next() {
         if (this.current.getNext()) {
             if (this.goToPage(this.current.getNext(), this.currentIndex + 1)) {
                 if (this.config.enableHistory) {
@@ -142,7 +153,11 @@
         }
     };
 
-    PureWizard.prototype.prev = function () {
+    /**
+     *  @function
+     *  Move to previouse page if present
+     */
+    PureWizard.prototype.prev = function pureWizard_prev () {
         if (this.current.getPrev()) {
             if (this.goToPage(this.current.getPrev(), this.currentIndex - 1)) {
                 if (this.config.enableHistory) {
@@ -152,21 +167,46 @@
         }
     };
 
-    PureWizard.prototype.onPageChanged = function (callback) {
+    //TODO: maybe remove these? dupblicate onPageChanged event 
+    /**
+     * Subscription to an event when the page is changed
+     * @function 
+     * @param {Function} callback 
+     */
+    PureWizard.prototype.onPageChanged = function pureWizardOnPageChanged(callback) {
         this.form.addEventListener('onPageChanged', function (e) {
             callback(e);
         });
     };
 
-    PureWizard.prototype.onSubmit = function (callback) {
+    /**
+     *  When the form is submit 
+     *  @function
+     * 
+     * @param {Function} callback
+     */
+    PureWizard.prototype.onSubmit = function PureWizard_onSubmit(callback) {
         this.onSubmitCallback = callback;
     };
 
-    PureWizard.prototype.goToPageByNumber = function (pageNumber) {
+    /**
+     * Go to page by number
+     * @function 
+     * @param {Number} pageNumber - number of the page you whant to navigate, starts from 0
+     */
+    PureWizard.prototype.goToPageByNumber = function PureWizard_goToPageByNumber(pageNumber) {
         this.goToPage(this.pages[pageNumber], pageNumber);
     };
 
-    PureWizard.prototype.goToPage = function (page, step) {
+    /**
+     * Go to page
+     * @function 
+     * @param {PureWizardPage} page
+     * @param {Number} page page number youwhant want to navigate, starts from 0
+     * 
+     * @return {Boolean}
+     */
+    PureWizard.prototype.goToPage = function PureWizard_goToPage(page, step) {
         // Validate page if we go forward
         if (!this.current.isContainsError() || this.currentIndex > step) {
 
@@ -208,7 +248,11 @@
         return false;
     };
 
-    PureWizard.prototype.toggleButtons = function () {
+    /**
+     * Toggle next, prev, submit buttons state depending the current wizard states
+     * @function 
+     */
+    PureWizard.prototype.toggleButtons = function PureWizard_toggleButtons() {
         var self = this;
 
         self.buttons.finish.style.display = 'none';
@@ -234,6 +278,17 @@
         }
     };
 
+
+    /**
+     * Represents a single page
+     * @class
+     * @constructor
+     * 
+     * @param {object} config
+     * @param {any} container
+     * @param {any} prev
+     * @param {any} next
+     */
     function PureWizardPage(config, container, prev, next) {
         this.el = container;
         this.prev = prev || null;
@@ -241,15 +296,33 @@
         this.config = config;
     }
 
-    PureWizardPage.prototype.getInvalidElements = function () {
+    /**
+     * Return invalid elements from the page
+     * @function
+     * 
+     * @return {NodeList}
+     */
+    PureWizardPage.prototype.getInvalidElements = function PureWizardPage_getInvalidElements() {
         return this.el.querySelectorAll(':invalid');
     };
 
-    PureWizardPage.prototype.isValid = function () {
+    /**
+     * Check if the page is valid
+     * @function
+     * 
+     * @return {Boolean}
+     */
+    PureWizardPage.prototype.isValid = function PureWizardPage_isValid () {
         return this.getInvalidElements().length === 0;
     };
     
-    PureWizardPage.prototype.isContainsError = function () {
+    /**
+     * Check if the page has errors
+     * @function
+     * 
+     * @return {Boolean}
+     */
+    PureWizardPage.prototype.isContainsError = function PureWizardPage_isContainsError() {
         var invalidInputs = this.getInvalidElements(),
             containsErrors = false,
             i, invalidInputLabel, errorMsg, errorMsgContainer;
@@ -292,17 +365,38 @@
         return containsErrors;
     };
 
-    PureWizardPage.prototype.getTitle = function () {
+    /**
+     * Get page title
+     * @function 
+     */
+    PureWizardPage.prototype.getTitle = function PureWizardPage_getTitle() {
         return this.el.querySelector('legend').innerHTML;
     };
 
+    /**
+     * Return the next page
+     * @function 
+     * 
+     * @return {PureWizardPage}
+     */
     PureWizardPage.prototype.getNext = function () {
         return this.next;
     };
+
+    /**
+     * Return the previouse page
+     * @function
+     * 
+     * @return {PureWizardPage}
+     */
     PureWizardPage.prototype.getPrev = function () {
         return this.prev;
     };
 
+    /**
+     * Show the page
+     * @function
+     */
     PureWizardPage.prototype.show = function () {
         if (this.config.hideClass) {
             this.el.className = this.el.className.replace(this.config.hideClass, '');
@@ -311,6 +405,10 @@
         }
     };
 
+    /**
+     * Hide the page
+     * @function
+     */
     PureWizardPage.prototype.hide = function () {
         if (this.config.hideClass) {
             this.el.className += ' ' + this.config.hideClass;
@@ -319,6 +417,19 @@
         }
     };
 
+
+    /**
+     * Section with steps
+     * @class
+     * @constructor
+     * 
+     * @param {PureWizardPage} pages    - The list with all pages
+     * @param {HTMLElement} container   - Container where the steps are located
+     * @param {Object} config           - Additional config object
+     * @param {String} config.ulClass   - Add custom ul class
+     * @param {String} config.liClass   - Add custom li class
+     * @param {String} config.aClass    - Add custom a class
+     */
     function WizardSteps(pages, container, config) {
 
         this.config = config;
@@ -344,9 +455,16 @@
             self.el.appendChild(li);
         });
         container.appendChild(self.el);
+
+        // Select by default first step
+        this.setStep(0);
     }
 
-    // Highlight current step with class
+    /**
+     * Highlight current step with class
+     * @function
+     * @param {Number} stepNumber Make the step active, starts from 0
+     */
     WizardSteps.prototype.setStep = function (stepNumber) {
         var currentActive = this.el.querySelector('.' + this.config.aActiveClass);
         if (currentActive) {
