@@ -18,32 +18,53 @@
 
     'use strict';
 
+    var defaultConfig = {
+        enableHistory: false,
+        errorClass: 'has-error',
+        statusContainerCfg: {},
+        stepsSplitCssQuery: 'fieldset',
+        hideNextPrevButtons: true,
+        startPage: 0
+    };
+
     /**
      * Creates a wizard instance
      * @class
      * @constructor
      * 
-     * @property {Object}  config                     - The defaults values for wizard config
-     * @property {Boolean} config.enableHistory       - Enable html5 history navigation
-     * @property {String}  config.errorClass          - Class name that would apply on field error
-     * @property {String}  config.stepsSplitCssQuery  - Specify the css query that will be apply to wizard container and split into steps 
-     * @property {String}  config.wizardNodeId        - Id of main section that contains wizard
-     * @property {Boolean} config.hideNextPrevButtons - If true when hide buttons if no steps back/forward and if false disables them
-     * @property {Object}  config.statusContainerCfg  - Allo to configure a status panel
+     * @property {Object}  config                        - The defaults values for wizard config
+     * @property {String}  config.wizardNodeId           - Id of main section that contains wizard
+     * @property {Boolean} [config.enableHistory]        - Enable html5 history navigation
+     * @property {String}  [config.errorClass]           - Class name that would apply on field error
+     * @property {String}  [config.stepsSplitCssQuery]   - Specify the css query that will be apply to wizard container and split into steps 
+     * @property {Boolean} [config.hideNextPrevButtons]  - If true when hide buttons if no steps back/forward and if false disables them
+     * @property {Object}  [config.statusContainerCfg]   - Allo to configure a status panel
+     * @property {Number}  [config.startPage]            - Open form on the particular page number, starts from 0
      * 
      */
     function PureWizard(config) {
 
-        // TODO: split by 1. features, 2. Stylish, 3. Init function to setup properties
-        this.config = config || {};
-        this.config.enableHistory = this.config.enableHistory || false;
-        this.config.errorClass = this.config.errorClass || 'has-error';
+        if (!config || !config.wizardNodeId) {
+            throw new Error('PureWizard initialization error - wizardNodeId should be defined');
+        }
 
-        this.statusSectionId = this.config.statusContainerCfg ? this.config.statusContainerCfg.containerId : null;
+        // External config
+        this.config = {};
+
+        this.config.wizardNodeId = config.wizardNodeId;
+        this.config.enableHistory = config.enableHistory || defaultConfig.enableHistory;
+        this.config.errorClass = config.errorClass || defaultConfig.errorClass;
+        this.config.stepsSplitCssQuery = config.stepsSplitCssQuery || defaultConfig.stepsSplitCssQuery;
+        this.config.hideNextPrevButtons = config.hideNextPrevButtons || defaultConfig.hideNextPrevButtons;
+        this.config.startPage = config.startPage || defaultConfig.startPage;
+        this.config.statusContainerCfg = config.statusContainerCfg || defaultConfig.statusContainerCfg;
+
+        // Internal config
         this.pages = [];
         this.current = null;
         this.currentIndex = 0;
         this.form = document.getElementById(this.config.wizardNodeId);
+        this.statusSectionId = this.config.statusContainerCfg.containerId;
 
         this.buttons = {
             next: this.form.querySelector('.pwNext'),
@@ -53,14 +74,16 @@
 
         var
             self = this,
-            fieldsets = this.form.querySelectorAll('#' + this.config.wizardNodeId + '>' + (config.stepsSplitCssQuery || 'fieldset')),
-            i, node;
+            fieldsets = this.form.querySelectorAll('#' + this.config.wizardNodeId + '>' + (this.config.stepsSplitCssQuery)),
+            i,
+            node;
 
         if (fieldsets.length === 0) {
             throw new Error('Can\'t find the sections to divide wizard, please check the stepsSplitCssQuery option.');
         }
 
         divideIntoPages();
+
         if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
             initStatusSection();
         }
@@ -70,17 +93,13 @@
             p.hide();
         });
 
-        // Then show first page
-        if (this.pages.length > 0) {
-            this.current.show();
-            this.toggleButtons();
-        }
+        self.goToPageNumber(this.config.startPage, true);
 
-        // TODO: test here
+        // TODO: disable for now
         if (this.config.enableHistory) {
             window.addEventListener('popstate', function (e) {
                 if (e.state) {
-                    self.goToPageByNumber(e.state - 1);
+                    self.goToPageNumber(e.state - 1);
                 }
             });
             history.pushState(1, null, null);
@@ -108,13 +127,12 @@
         });
 
         this.form.addEventListener('reset', function (e) {
-            self.goToPageByNumber(0);
+            self.goToPageNumber(0);
         });
 
         function divideIntoPages() {
             for (i = 0; i < fieldsets.length; i++) {
                 node = fieldsets[i];
-                // Set the first page as current
                 if (self.pages.length === 0) {
                     self.pages.push(new PureWizardPage(self.config, node));
                     self.current = self.pages[0];
@@ -195,31 +213,40 @@
     /**
      * Go to page by number
      * @function 
-     * @param {Number} pageNumber - number of the page you whant to navigate, starts from 0
+     * @param {Number} pageNumber        - number of the page you whant to navigate, starts from 0
+     * @param {Boolean} [skipValidation] - skip validation when switching the page 
      */
-    PureWizard.prototype.goToPageByNumber = function PureWizard_goToPageByNumber(pageNumber) {
-        this.goToPage(this.pages[pageNumber], pageNumber);
+    PureWizard.prototype.goToPageNumber = function PureWizard_goToPageNumber(pageNumber, skipValidation) {
+        if (pageNumber >= this.pages.length) {
+            pageNumber = this.pages.length - 1;
+        }
+        if (pageNumber < 0) {
+            pageNumber = 0;
+        }
+        this.goToPage(this.pages[pageNumber], pageNumber, skipValidation);
     };
 
     /**
      * Go to page
      * @function 
      * @param {PureWizardPage} page
-     * @param {Number} page page number youwhant want to navigate, starts from 0
+     * @param {Number} page              - page number youwhant want to navigate, starts from 0
+     * @param {Boolean} [skipValidation] - skip validation when switching the page 
      * 
      * @return {Boolean}
      */
-    PureWizard.prototype.goToPage = function PureWizard_goToPage(page, step) {
+    PureWizard.prototype.goToPage = function PureWizard_goToPage(page, step, skipValidation) {
         // Validate page if we go forward
-        if (!this.current.isContainsError() || this.currentIndex > step) {
-
-            // If goes for example from page 1 to 3 and page 2 is invalid
-            // validate through page 2, but page 3 can be invalid
-            if (this.currentIndex < step && this.currentIndex + 1 !== step) {
-                if (this.pages.filter(function (p, i, arr) {
-                    return !p.isValid() && (i !== step);
-                }).length > 0) {
-                    return;
+        if (!this.current.isContainsError() || this.currentIndex > step || skipValidation) {
+            if (!skipValidation) {
+                // If goes for example from page 1 to 3 and page 2 is invalid
+                // validate through page 2, but page 3 can be invalid
+                if (this.currentIndex < step && this.currentIndex + 1 !== step) {
+                    if (this.pages.filter(function (p, i, arr) {
+                        return !p.isValid() && (i !== step);
+                    }).length > 0) {
+                        return;
+                    }
                 }
             }
 
@@ -458,9 +485,6 @@
             self.el.appendChild(li);
         });
         container.appendChild(self.el);
-
-        // Select by default first step
-        this.setStep(0);
     }
 
     /**
