@@ -1,5 +1,5 @@
 (function (root, factory) {
-    
+
     'use strict';
 
     if (typeof define === 'function' && define.amd) {
@@ -14,10 +14,10 @@
         // Browser globals (root is window)
         root.PureWizard = factory();
     }
-}(this, function () {
+} (this, function () {
 
     'use strict';
-    
+
     /**
      * Creates a wizard instance
      * @class
@@ -26,14 +26,13 @@
      * @property {Object}  config                     - The defaults values for wizard config
      * @property {Boolean} config.enableHistory       - Enable html5 history navigation
      * @property {String}  config.errorClass          - Class name that would apply on field error
+     * @property {String}  config.stepsSplitCssQuery  - Specify the css query that will be apply to wizard container and split into steps 
      * @property {String}  config.wizardNodeId        - Id of main section that contains wizard
      * @property {Boolean} config.hideNextPrevButtons - If true when hide buttons if no steps back/forward and if false disables them
      * @property {Object}  config.statusContainerCfg  - Allo to configure a status panel
      * 
      */
     function PureWizard(config) {
-
-        var self = this;
 
         // TODO: split by 1. features, 2. Stylish, 3. Init function to setup properties
         this.config = config || {};
@@ -52,12 +51,18 @@
             finish: this.form.querySelector('.pwFinish')
         };
 
-        var fieldsets = this.form.children,
+        var
+            self = this,
+            fieldsets = this.form.querySelectorAll('#' + this.config.wizardNodeId + '>' + (config.stepsSplitCssQuery || 'fieldset')),
             i, node;
+
+        if (fieldsets.length === 0) {
+            throw new Error('Can\'t find the sections to divide wizard, please check the stepsSplitCssQuery option.');
+        }
 
         divideIntoPages();
         if (this.statusSectionId && document.getElementById(this.statusSectionId)) {
-            initStatusSection();        
+            initStatusSection();
         }
 
         // Hide all pages at start
@@ -109,20 +114,18 @@
         function divideIntoPages() {
             for (i = 0; i < fieldsets.length; i++) {
                 node = fieldsets[i];
-                if (node.tagName.toLowerCase() === 'fieldset') {
-                    // Set the first page as current
-                    if (self.pages.length === 0) {
-                        self.pages.push(new PureWizardPage(self.config, node));
-                        self.current = self.pages[0];
-                    } else {
-                        var prev = self.pages[self.pages.length - 1];
-                        var newPage = new PureWizardPage(self.config, node, prev);
-                        self.pages.push(newPage);
-                        prev.next = newPage;
-                    }
+                // Set the first page as current
+                if (self.pages.length === 0) {
+                    self.pages.push(new PureWizardPage(self.config, node));
+                    self.current = self.pages[0];
+                } else {
+                    var prev = self.pages[self.pages.length - 1];
+                    var newPage = new PureWizardPage(self.config, node, prev);
+                    self.pages.push(newPage);
+                    prev.next = newPage;
                 }
             }
-        }  
+        }
 
         function initStatusSection() {
             var statusSectionContainer = document.getElementById(self.statusSectionId);
@@ -157,7 +160,7 @@
      *  @function
      *  Move to previouse page if present
      */
-    PureWizard.prototype.prev = function pureWizard_prev () {
+    PureWizard.prototype.prev = function pureWizard_prev() {
         if (this.current.getPrev()) {
             if (this.goToPage(this.current.getPrev(), this.currentIndex - 1)) {
                 if (this.config.enableHistory) {
@@ -214,8 +217,8 @@
             // validate through page 2, but page 3 can be invalid
             if (this.currentIndex < step && this.currentIndex + 1 !== step) {
                 if (this.pages.filter(function (p, i, arr) {
-                        return !p.isValid() && (i !== step);
-                    }).length > 0) {
+                    return !p.isValid() && (i !== step);
+                }).length > 0) {
                     return;
                 }
             }
@@ -312,10 +315,10 @@
      * 
      * @return {Boolean}
      */
-    PureWizardPage.prototype.isValid = function PureWizardPage_isValid () {
+    PureWizardPage.prototype.isValid = function PureWizardPage_isValid() {
         return this.getInvalidElements().length === 0;
     };
-    
+
     /**
      * Check if the page has errors
      * @function

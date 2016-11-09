@@ -82,25 +82,25 @@
         </div>
 
         <form class="pure-u-1-6 pure-form pure-form-stacked" id="wizardSimple">
-            <fieldset class="pure-u-1">
+            <div class="pure-u-1">
                 <label for="fName">First Name</label>
                 <input class="pure-u-1" name="fName" value="" id="fName" type="text" placeholder="">
                 <label for="lName">Last Name</label>
                 <input class="pure-u-1" name="lName" value="" id="lName" type="text" placeholder="">
                 <label class="pure-u-1" for="password">Password</label>
                 <input class="pure-u-1" name="password" value="" id="password" type="password" placeholder="">
-            </fieldset>
+            </div>
 
-            <fieldset class="pure-u-1">
+            <div class="pure-u-1">
                 <label for="address">Address</label>
                 <input class="pure-u-1" name="address" value="" id="address" type="text" placeholder="">
                 <label for="telephone1">Telephone</label>
                 <input class="pure-u-1" name="telephone" value="" id="telephone1" type="text" placeholder="">
                 <label for="email1">Email</label>
                 <input class="pure-u-1" name="email1" value="" id="email1" type="email" placeholder="">
-            </fieldset>
+            </div>
 
-            <fieldset class="pure-u-1">
+            <div class="pure-u-1">
                 <label for="sexf" class="pure-radio">
                     <input id="sexf" type="radio" name="sex" value="option2">
                     Male
@@ -109,16 +109,16 @@
                     <input id="sexm" type="radio" name="sex" value="option2">
                     Female
                 </label>
-            </fieldset>
+            </div>
 
-            <fieldset class="pure-u-1">
+            <div class="pure-u-1">
                 <label for="notes">Notes:</label>
                 <textarea class="pure-u-1" name="notes" id="notes" placeholder=""></textarea>
                 <label for="agree" class="pure-checkbox">
                     <input name="agree" id="agree" type="checkbox" required>
                     I agree
                 </label>
-            </fieldset>
+            </div>
 
             <footer>
                 <button class="pwPrev pure-button">Prev</button>
@@ -354,7 +354,8 @@
         var wizardSimple = new PureWizard({
             wizardNodeId: 'wizardSimple',
             hideNextPrevButtons: true,
-            enableHistory: false
+            enableHistory: false,
+            stepsSplitCssQuery: 'div'
         });
 
         wizardSimple.onSubmit(function (e) {
