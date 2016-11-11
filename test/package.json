@@ -1,0 +1,9 @@
+{
+  "name": "purewizardtests",
+  "version": "1.0.0",
+  "author": "Vyacheslav Horodovych",
+  "dependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2"
+  }
+}
