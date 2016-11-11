@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Wizard</title>
+    <link rel="stylesheet" href="../css/pure-min.css">
+    <link rel="stylesheet" href="../css/pure.css">
+    <link rel="stylesheet" href="node_modules/mocha/mocha.css">
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="pure-g">
+
+            <!--<div class="pure-u-1" id="smallWizardOnComplete">
+                <p>Submission complete!</p>
+                <button id="startSmallWizardAgain" class="pure-button button-secondary button-success">Submit new</button>
+            </div>-->
+
+            <form class="pure-u-1-6 pure-form pure-form-stacked" id="wizardSimple">
+                <div class="pure-u-1" id="step1">
+                    <label for="fName">First Name</label>
+                    <input class="pure-u-1" name="fName" value="" id="fName" type="text" placeholder="">
+                    <label for="lName">Last Name</label>
+                    <input class="pure-u-1" name="lName" value="" id="lName" type="text" placeholder="">
+                    <label class="pure-u-1" for="password">Password</label>
+                    <input class="pure-u-1" name="password" value="" id="password" type="password" placeholder="">
+                </div>
+
+
+                <div class="pure-u-1" id="step2">
+                    <label for="sexf" class="pure-radio">
+                    <input id="sexf" type="radio" name="sex" value="option2">
+                    Male
+                </label>
+                    <label for="sexm" class="pure-radio">
+                    <input id="sexm" type="radio" name="sex" value="option2">
+                    Female
+                </label>
+                </div>
+
+                <div class="pure-u-1" id="step3">
+                    <label for="notes">Notes:</label>
+                    <textarea class="pure-u-1" name="notes" id="notes" placeholder=""></textarea>
+                    <label for="agree" class="pure-checkbox">
+                    <input name="agree" id="agree" type="checkbox" required>
+                    I agree
+                </label>
+                </div>
+
+                <footer>
+                    <button class="pwPrev pure-button">Prev</button>
+                    <button class="pwNext pure-button">Next</button>
+                    <button class="pwFinish pure-button pure-button-primary">Finish</button>
+                </footer>
+            </form>
+        </div>
+
+        <div id="mocha"></div>
+        <script src="node_modules/mocha/mocha.js"></script>
+        <script src="node_modules/chai/chai.js"></script>
+
+        <script src="../js/pureWizard.js"></script>
+
+        <script>
+            mocha.setup('bdd');
+        </script>
+        <script src="tests.js"></script>
+        <script>
+            mocha.run();
+        </script>
+</body>
+
+</html>

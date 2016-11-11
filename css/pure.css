@@ -1,0 +1,60 @@
+.container {
+    margin: 30px;
+}
+
+.pure-menu {
+    padding-left: 10px;
+}
+
+.has-error {
+    color: #b94a48;
+    border-color: #e9322d !important;
+}
+
+.current-step {
+    font-weight: bold;
+}
+
+input[type=date] {
+    height: 35px;
+}
+
+textarea {
+    resize: vertical;
+    /* user can resize vertically, but width is fixed */
+}
+
+legend {
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+label {
+    font-size: 0.9em;
+}
+
+form {
+    background-color: #FAFAFA;
+    border: 1px solid #dddddd;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+
+.custom-restricted-width {
+    /* To limit the menu width to the content of the menu: */
+    display: inline-block;
+    /* Or set the width explicitly: */
+    /* width: 10em; */
+}
+
+.button-success,
+.button-secondary {
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+
+.button-success {
+    background: rgb(28, 184, 65);
+    /* this is a green */
+}

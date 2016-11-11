@@ -14,7 +14,7 @@
         // Browser globals (root is window)
         root.PureWizard = factory();
     }
-} (this, function () {
+}(this, function () {
 
     'use strict';
 
@@ -175,6 +175,27 @@
     };
 
     /**
+     * Get current page
+     * @function
+     * 
+     * @return {PureWizadPage}
+     */
+    PureWizard.prototype.getCurrentPage = function () {
+        return this.current;
+    };
+
+
+    /**
+     * Get current page index, starts from 0
+     * @function
+     * 
+     * @return {Number}
+     */
+    PureWizard.prototype.getCurrentPageNumber = function () {
+        return this.currentIndex;
+    };
+
+    /**
      *  @function
      *  Move to previouse page if present
      */
@@ -243,8 +264,8 @@
                 // validate through page 2, but page 3 can be invalid
                 if (this.currentIndex < step && this.currentIndex + 1 !== step) {
                     if (this.pages.filter(function (p, i, arr) {
-                        return !p.isValid() && (i !== step);
-                    }).length > 0) {
+                            return !p.isValid() && (i !== step);
+                        }).length > 0) {
                         return;
                     }
                 }
@@ -470,7 +491,8 @@
 
         this.el = document.createElement('ul');
         this.el.className += ' ' + ulClass;
-        var self = this, li, a;
+        var self = this,
+            li, a;
 
         // Populate status sections items
         pages.forEach(function (e, i) {
