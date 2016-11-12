@@ -34,18 +34,22 @@
      * 
      * @property {Object}  config                        - The defaults values for wizard config
      * @property {String}  config.wizardNodeId           - Id of main section that contains wizard
-     * @property {Boolean} [config.enableHistory]        - Enable html5 history navigation
      * @property {String}  [config.errorClass]           - Class name that would apply on field error
      * @property {String}  [config.stepsSplitCssQuery]   - Specify the css query that will be apply to wizard container and split into steps 
      * @property {Boolean} [config.hideNextPrevButtons]  - If true when hide buttons if no steps back/forward and if false disables them
      * @property {Object}  [config.statusContainerCfg]   - Allo to configure a status panel
      * @property {Number}  [config.startPage]            - Open form on the particular page number, starts from 0
      * 
+     * The wizard uses main three buttons to operate that should be with following css classes:
+     *   next button          - 'pwNext'
+     *   previouse button     - 'pwPrev'
+     *   final/submit button   - 'pwFinish'
+     * 
      */
     function PureWizard(config) {
 
         if (!config || !config.wizardNodeId) {
-            throw new Error('PureWizard initialization error - wizardNodeId should be defined');
+            throw new Error('PureWizard init error - wizardNodeId should be defined');
         }
 
         // External config
@@ -72,6 +76,14 @@
             finish: this.form.querySelector('.pwFinish')
         };
 
+        if (!this.buttons.next) {
+            throw new Error('PureWizard init error - next button not found, create one with class \'pwNext\'');
+        }
+
+        if (!this.buttons.prev) {
+            throw new Error('PureWizard init error - previouse button not found, create one with class \'pwPrev\'');
+        }
+
         var
             self = this,
             fieldsets = this.form.querySelectorAll('#' + this.config.wizardNodeId + '>' + (this.config.stepsSplitCssQuery)),
@@ -95,36 +107,28 @@
 
         self.goToPage(this.config.startPage, true);
 
-        // Not tested, require additional work on this
-        // if (this.config.enableHistory) {
-        //     window.addEventListener('popstate', function (e) {
-        //         if (e.state) {
-        //             self.goToPage(e.state - 1);
-        //         }
-        //     });
-        //     history.pushState(1, null, null);
-        // }
-
         this.buttons.next.addEventListener('click', function (e) {
-            e.preventDefault();
             PureWizard.prototype.next.call(self);
         });
 
         this.buttons.prev.addEventListener('click', function (e) {
-            e.preventDefault();
             PureWizard.prototype.prev.call(self);
         });
 
-        this.buttons.finish.addEventListener('click', function (e) {
-            e.preventDefault();
-            if (!self.current.isContainsError()) {
-                if (self.onSubmitCallback) {
-                    self.onSubmitCallback(e, {});
+        if (this.buttons.finish) {
+            this.buttons.finish.addEventListener('click', function (e) {
+                if (!self.current.isContainsError()) {
+                    if (self.onSubmitCallback) {
+                        self.onSubmitCallback(e, {});
+                    } else {
+                        self.form.submit();
+                    }
                 } else {
-                    self.form.submit();
+                    e.preventDefault();
+                    return false;
                 }
-            }
-        });
+            });
+        }
 
         this.form.addEventListener('reset', function (e) {
             self.goToPage(0);
@@ -166,11 +170,17 @@
      */
     PureWizard.prototype.next = function PureWizard_next() {
         if (this.current.getNext()) {
-            if (this.goToPage(this.currentIndex + 1)) {
-                if (this.config.enableHistory) {
-                    history.pushState(this.currentIndex + 1, null, null);
-                }
-            }
+            this.goToPage(this.currentIndex + 1)
+        }
+    };
+
+    /**
+     *  @function
+     *  Move to previouse page if present
+     */
+    PureWizard.prototype.prev = function pureWizard_prev() {
+        if (this.current.getPrev()) {
+            this.goToPage(this.currentIndex - 1);
         }
     };
 
@@ -195,27 +205,13 @@
     };
 
     /**
-     *  @function
-     *  Move to previouse page if present
-     */
-    PureWizard.prototype.prev = function pureWizard_prev() {
-        if (this.current.getPrev()) {
-            if (this.goToPage(this.currentIndex - 1)) {
-                if (this.config.enableHistory) {
-                    history.pushState(this.currentIndex, null, null);
-                }
-            }
-        }
-    };
-
-    //TODO: maybe remove these? dupblicate onPageChanged event 
-    /**
      * Subscription to an event when the page is changed
      * @function 
      * @param {Function} callback 
+     * 
      */
     PureWizard.prototype.onPageChanged = function pureWizardOnPageChanged(callback) {
-        this.form.addEventListener('onPageChanged', function (e) {
+        this.form.addEventListener('onPWPageChanged', function (e) {
             callback(e);
         });
     };
@@ -238,6 +234,8 @@
      * @param {Boolean} [skipValidation] - skip validation when switching the page 
      * 
      * @return {Boolean}
+     * 
+     * @fires PureWizard#onPWPageChanged
      */
     PureWizard.prototype.goToPage = function PureWizard_goToPage(pageNumber, skipValidation) {
 
@@ -278,10 +276,18 @@
 
             this.toggleButtons();
 
-            var event = new CustomEvent('onPageChanged', {
+            /**
+             * @event PureWizard#onPWPageChanged
+             * 
+             * @type {Object}
+             * @property {Object} detail
+             * @property {Number} oldPage
+             * @property {Number} newPage
+             */
+            var event = new CustomEvent('onPWPageChanged', {
                 detail: {
-                    'pageBefore': indexBefore + 1,
-                    'pageAfter': this.currentIndex + 1
+                    'oldPage': indexBefore + 1,
+                    'newPage': this.currentIndex + 1
                 }
             });
             this.form.dispatchEvent(event);
