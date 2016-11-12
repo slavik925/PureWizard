@@ -14,10 +14,9 @@
 
         <div class="pure-g">
 
-            <!--<div class="pure-u-1" id="smallWizardOnComplete">
+            <div class="pure-u-1" id="smallWizardOnComplete">
                 <p>Submission complete!</p>
-                <button id="startSmallWizardAgain" class="pure-button button-secondary button-success">Submit new</button>
-            </div>-->
+            </div>
 
             <form class="pure-u-1-6 pure-form pure-form-stacked" id="wizardSimple">
                 <div class="pure-u-1" id="step1">
@@ -32,11 +31,11 @@
 
                 <div class="pure-u-1" id="step2">
                     <label for="sexf" class="pure-radio">
-                    <input id="sexf" type="radio" name="sex" value="option2">
+                    <input required id="sexf" type="radio" name="sex" value="option2">
                     Male
                 </label>
                     <label for="sexm" class="pure-radio">
-                    <input id="sexm" type="radio" name="sex" value="option2">
+                    <input required id="sexm" type="radio" name="sex" value="option2">
                     Female
                 </label>
                 </div>
@@ -51,9 +50,9 @@
                 </div>
 
                 <footer>
-                    <button class="pwPrev pure-button">Prev</button>
-                    <button class="pwNext pure-button">Next</button>
-                    <button class="pwFinish pure-button pure-button-primary">Finish</button>
+                    <button id="prevButton" class="pwPrev pure-button">Prev</button>
+                    <button id="nextButton" class="pwNext pure-button">Next</button>
+                    <button id="submitButton" class="pwFinish pure-button pure-button-primary">Finish</button>
                 </footer>
             </form>
         </div>
@@ -66,6 +65,7 @@
 
         <script>
             mocha.setup('bdd');
+            document.getElementById('smallWizardOnComplete').style.display = 'none';
         </script>
         <script src="tests.js"></script>
         <script>

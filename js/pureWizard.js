@@ -93,17 +93,17 @@
             p.hide();
         });
 
-        self.goToPageNumber(this.config.startPage, true);
+        self.goToPage(this.config.startPage, true);
 
-        // TODO: disable for now
-        if (this.config.enableHistory) {
-            window.addEventListener('popstate', function (e) {
-                if (e.state) {
-                    self.goToPageNumber(e.state - 1);
-                }
-            });
-            history.pushState(1, null, null);
-        }
+        // Not tested, require additional work on this
+        // if (this.config.enableHistory) {
+        //     window.addEventListener('popstate', function (e) {
+        //         if (e.state) {
+        //             self.goToPage(e.state - 1);
+        //         }
+        //     });
+        //     history.pushState(1, null, null);
+        // }
 
         this.buttons.next.addEventListener('click', function (e) {
             e.preventDefault();
@@ -127,7 +127,7 @@
         });
 
         this.form.addEventListener('reset', function (e) {
-            self.goToPageNumber(0);
+            self.goToPage(0);
         });
 
         function divideIntoPages() {
@@ -154,7 +154,7 @@
                 var link = e.target;
                 if (link.tagName.toLocaleLowerCase() === 'a') {
                     var pageNumber = Number(link.attributes['data-step'].value);
-                    self.goToPage(self.pages[pageNumber], pageNumber);
+                    self.goToPage(pageNumber);
                 }
             });
         }
@@ -166,7 +166,7 @@
      */
     PureWizard.prototype.next = function PureWizard_next() {
         if (this.current.getNext()) {
-            if (this.goToPage(this.current.getNext(), this.currentIndex + 1)) {
+            if (this.goToPage(this.currentIndex + 1)) {
                 if (this.config.enableHistory) {
                     history.pushState(this.currentIndex + 1, null, null);
                 }
@@ -184,7 +184,6 @@
         return this.current;
     };
 
-
     /**
      * Get current page index, starts from 0
      * @function
@@ -201,7 +200,7 @@
      */
     PureWizard.prototype.prev = function pureWizard_prev() {
         if (this.current.getPrev()) {
-            if (this.goToPage(this.current.getPrev(), this.currentIndex - 1)) {
+            if (this.goToPage(this.currentIndex - 1)) {
                 if (this.config.enableHistory) {
                     history.pushState(this.currentIndex, null, null);
                 }
@@ -232,22 +231,6 @@
     };
 
     /**
-     * Go to page by number
-     * @function 
-     * @param {Number} pageNumber        - number of the page you whant to navigate, starts from 0
-     * @param {Boolean} [skipValidation] - skip validation when switching the page 
-     */
-    PureWizard.prototype.goToPageNumber = function PureWizard_goToPageNumber(pageNumber, skipValidation) {
-        if (pageNumber >= this.pages.length) {
-            pageNumber = this.pages.length - 1;
-        }
-        if (pageNumber < 0) {
-            pageNumber = 0;
-        }
-        this.goToPage(this.pages[pageNumber], pageNumber, skipValidation);
-    };
-
-    /**
      * Go to page
      * @function 
      * @param {PureWizardPage} page
@@ -256,15 +239,25 @@
      * 
      * @return {Boolean}
      */
-    PureWizard.prototype.goToPage = function PureWizard_goToPage(page, step, skipValidation) {
+    PureWizard.prototype.goToPage = function PureWizard_goToPage(pageNumber, skipValidation) {
+
+        if (pageNumber >= this.pages.length) {
+            pageNumber = this.pages.length - 1;
+        }
+        if (pageNumber < 0) {
+            pageNumber = 0;
+        }
+
+        var page = this.pages[pageNumber];
+
         // Validate page if we go forward
-        if (!this.current.isContainsError() || this.currentIndex > step || skipValidation) {
+        if (!this.current.isContainsError() || this.currentIndex > pageNumber || skipValidation) {
             if (!skipValidation) {
                 // If goes for example from page 1 to 3 and page 2 is invalid
                 // validate through page 2, but page 3 can be invalid
-                if (this.currentIndex < step && this.currentIndex + 1 !== step) {
+                if (this.currentIndex < pageNumber && this.currentIndex + 1 !== pageNumber) {
                     if (this.pages.filter(function (p, i, arr) {
-                            return !p.isValid() && (i !== step);
+                            return !p.isValid() && (i !== pageNumber);
                         }).length > 0) {
                         return;
                     }
@@ -276,11 +269,11 @@
             this.current.hide();
             this.current = page;
             this.current.show();
-            this.currentIndex = step;
+            this.currentIndex = pageNumber;
 
             // Update the status section
             if (this.statusSection) {
-                this.statusSection.setStep(step);
+                this.statusSection.setStep(pageNumber);
             }
 
             this.toggleButtons();
