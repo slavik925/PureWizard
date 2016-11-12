@@ -26,11 +26,11 @@ describe('Wizard Test', function () {
         });
 
         it('Step1: Next button shoud be enabled/visible', function () {
-            expect(document.getElementById('nextButton').style.display).to.equal('inline');
+            expect(document.getElementById('nextButton').style.display).to.equal('');
         });
 
         it('Step1: Only first step visible', function () {
-            expect(document.getElementById('step1').style.display).to.equal('inline');
+            expect(document.getElementById('step1').style.display).to.equal('');
 
             expect(document.getElementById('step2').style.display).to.equal('none');
             expect(document.getElementById('step3').style.display).to.equal('none');
@@ -42,7 +42,7 @@ describe('Wizard Test', function () {
             wizardSimple.next();
 
             expect(document.getElementById('step1').style.display).to.equal('none');
-            expect(document.getElementById('step2').style.display).to.equal('inline');
+            expect(document.getElementById('step2').style.display).to.equal('');
             expect(wizardSimple.getCurrentPageNumber()).to.equal(1);
 
         });
@@ -62,6 +62,7 @@ describe('Wizard Test', function () {
     describe('Step3 - Submit', function () {
 
         it('Step3: Not possible to submit until invalid', function () {
+            expect(document.getElementById('submitButton').style.display).to.equal('');
             document.getElementById('submitButton').click();
             expect(wizardSimple.getCurrentPageNumber()).to.equal(2);
         });

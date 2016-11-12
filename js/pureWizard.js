@@ -19,7 +19,6 @@
     'use strict';
 
     var defaultConfig = {
-        enableHistory: false,
         errorClass: 'has-error',
         statusContainerCfg: {},
         stepsSplitCssQuery: 'fieldset',
@@ -32,13 +31,13 @@
      * @class
      * @constructor
      * 
-     * @property {Object}  config                        - The defaults values for wizard config
-     * @property {String}  config.wizardNodeId           - Id of main section that contains wizard
-     * @property {String}  [config.errorClass]           - Class name that would apply on field error
-     * @property {String}  [config.stepsSplitCssQuery]   - Specify the css query that will be apply to wizard container and split into steps 
-     * @property {Boolean} [config.hideNextPrevButtons]  - If true when hide buttons if no steps back/forward and if false disables them
-     * @property {Object}  [config.statusContainerCfg]   - Allo to configure a status panel
-     * @property {Number}  [config.startPage]            - Open form on the particular page number, starts from 0
+     * @param    {Object}  config                                - The defaults values for wizard config
+     * @property {String}  config.wizardNodeId                   - Id of main section that contains wizard
+     * @property {String}  [config.errorClass='has-error']       - Class name that would apply on field error
+     * @property {String}  [config.stepsSplitCssQuery='fieldset'] - Specify the css query that will be apply to wizard container and split into steps 
+     * @property {Boolean} [config.hideNextPrevButtons='true']  - If true when hide buttons if no steps back/forward and if false disables them
+     * @property {Object}  [config.statusContainerCfg='{}']      - Allo to configure a status panel
+     * @property {Number}  [config.startPage='0']               - Open form on the particular page number, starts from 0
      * 
      * The wizard uses main three buttons to operate that should be with following css classes:
      *   next button          - 'pwNext'
@@ -74,6 +73,12 @@
             next: this.form.querySelector('.pwNext'),
             prev: this.form.querySelector('.pwPrev'),
             finish: this.form.querySelector('.pwFinish')
+        };
+
+        this.buttonsInitialDisplay = {
+            next: this.buttons.next.style.display,
+            prev: this.buttons.prev.style.display,
+            finish: this.buttons.finish.style.display
         };
 
         if (!this.buttons.next) {
@@ -303,28 +308,28 @@
      * @function 
      */
     PureWizard.prototype.toggleButtons = function PureWizard_toggleButtons() {
+
         var self = this;
 
-        self.buttons.finish.style.display = 'none';
-
-        if (!this.current.getPrev()) {
-            setNextPrevVisibility(self.buttons.prev, false);
-        } else {
-            setNextPrevVisibility(self.buttons.prev, true);
-        }
-        if (!this.current.getNext()) {
-            setNextPrevVisibility(self.buttons.next, false);
-            self.buttons.finish.style.display = 'inline';
-        } else {
-            setNextPrevVisibility(self.buttons.next, true);
-        }
-
-        function setNextPrevVisibility(button, value) {
+        function setNextPrevVisibility(button, initialDisplay, value) {
             if (self.config.hideNextPrevButtons) {
-                button.style.display = value ? 'inline' : 'none';
+                button.style.display = value ? initialDisplay : 'none';
             } else {
                 button.disabled = !value;
             }
+        }
+
+        self.buttons.finish.style.display = 'none';
+        if (!this.current.getPrev()) {
+            setNextPrevVisibility(self.buttons.prev, self.buttonsInitialDisplay.prev, false);
+        } else {
+            setNextPrevVisibility(self.buttons.prev, self.buttonsInitialDisplay.prev, true);
+        }
+        if (!this.current.getNext()) {
+            setNextPrevVisibility(self.buttons.next, self.buttonsInitialDisplay.next, false);
+            self.buttons.finish.style.display = self.buttonsInitialDisplay.finish;
+        } else {
+            setNextPrevVisibility(self.buttons.next, self.buttonsInitialDisplay.next, true);
         }
     };
 
@@ -334,10 +339,12 @@
      * @class
      * @constructor
      * 
-     * @param {object} config
-     * @param {any} container
-     * @param {any} prev
-     * @param {any} next
+     * @param {Object} config
+     * @property {Sting} [config.hideClass='']   - Css class used to hide wizard pages
+     * @property {String} [config.errorClass=''] - Css class to Highlight field with errors, if no
+     * @param {Node} container
+     * @param {PureWizardPage} [prev]
+     * @param {PureWizardPage} [next]
      */
     function PureWizardPage(config, container, prev, next) {
         this.el = container;
@@ -373,7 +380,8 @@
      * @return {Boolean}
      */
     PureWizardPage.prototype.isContainsError = function PureWizardPage_isContainsError() {
-        var invalidInputs = this.getInvalidElements(),
+        var
+            invalidInputs = this.getInvalidElements(),
             containsErrors = false,
             i, invalidInputLabel, errorMsg, errorMsgContainer;
 
@@ -451,7 +459,7 @@
         if (this.config.hideClass) {
             this.el.className = this.el.className.replace(this.config.hideClass, '');
         } else {
-            this.el.style.display = 'inline';
+            this.el.style.display = '';
         }
     };
 
@@ -473,12 +481,12 @@
      * @class
      * @constructor
      * 
-     * @param {PureWizardPage} pages    - The list with all pages
-     * @param {HTMLElement} container   - Container where the steps are located
-     * @param {Object} config           - Additional config object
-     * @param {String} config.ulClass   - Add custom ul class
-     * @param {String} config.liClass   - Add custom li class
-     * @param {String} config.aClass    - Add custom a class
+     * @param {PureWizardPage} pages      - The list with all pages
+     * @param {HTMLElement} container     - Container where the steps are located
+     * @param {Object} config              - Additional config object
+     * @property {String} config.ulClass   - Add custom ul class
+     * @property {String} config.liClass   - Add custom li class
+     * @property {String} config.aClass    - Add custom a class
      */
     function WizardSteps(pages, container, config) {
 
