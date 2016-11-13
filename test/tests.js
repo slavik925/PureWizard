@@ -6,13 +6,38 @@ describe('Wizard Test', function () {
 
     var wizardSimple = new PureWizard({
         wizardNodeId: 'wizardSimple',
-        stepsSplitCssQuery: 'div'
+        stepsSplitCssQuery: 'div',
+        statusContainerCfg: {
+            containerId: 'wizardStatusContainer'
+        }
     });
 
     wizardSimple.onSubmit(function (e) {
         document.forms['wizardSimple'].reset();
         document.getElementById('wizardSimple').style.display = 'none';
+        document.getElementById('wizardStatusContainer').style.display = 'none';
         document.getElementById('smallWizardOnComplete').style.display = 'block';
+    });
+
+    describe('Verify status section', function () {
+        it('Should have three section with titles', function () {
+            expect(document.querySelector('#wizardStatusContainer ul').children.length).to.equal(3);
+            expect(document.querySelector('#wizardStatusContainer ul > li:nth-child(1) > a').innerHTML).to.equal('Step 1');
+            expect(document.querySelector('#wizardStatusContainer ul > li:nth-child(2) > a').innerHTML).to.equal('Step 2');
+            expect(document.querySelector('#wizardStatusContainer ul > li:nth-child(3) > a').innerHTML).to.equal('Step 3');
+        });
+
+        it('Impossible to navigate to step throught invalid one', function () {
+            document.querySelector('#wizardStatusContainer ul > li:nth-child(3) > a').click();
+            expect(wizardSimple.getCurrentPageNumber()).to.equal(0);
+        });
+
+        it('Able to navigate', function () {
+            document.querySelector('#wizardStatusContainer ul > li:nth-child(2) > a').click();
+            expect(wizardSimple.getCurrentPageNumber()).to.equal(1);
+            document.querySelector('#wizardStatusContainer ul > li:nth-child(1) > a').click();
+            expect(wizardSimple.getCurrentPageNumber()).to.equal(0);
+        });
     });
 
     describe('Step1', function () {
@@ -72,7 +97,7 @@ describe('Wizard Test', function () {
             document.getElementById('submitButton').click();
 
             expect(wizardSimple.getCurrentPageNumber()).to.equal(0);
-        })
+        });
     });
 
 });

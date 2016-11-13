@@ -428,7 +428,11 @@
      * @function 
      */
     PureWizardPage.prototype.getTitle = function PureWizardPage_getTitle() {
-        return this.el.querySelector('legend').innerHTML;
+        var legend = this.el.querySelector('.pwStepTitle');
+        if (!legend) {
+            throw new Error('PureWizard error - no title for page, please add with \'.pwStepTitle\' class.');
+        }
+        return legend.innerHTML;
     };
 
     /**
@@ -477,29 +481,30 @@
 
 
     /**
-     * Section with steps
+     * Section with steps, constructs from list, list item and link.
      * @class
      * @constructor
      * 
-     * @param {PureWizardPage} pages      - The list with all pages
-     * @param {HTMLElement} container     - Container where the steps are located
-     * @param {Object} config              - Additional config object
-     * @property {String} config.ulClass   - Add custom ul class
-     * @property {String} config.liClass   - Add custom li class
-     * @property {String} config.aClass    - Add custom a class
+     * @param {PureWizardPage} pages         - The list with all pages
+     * @param {HTMLElement} container        - Container where the steps are located
+     * @param {Object} config                 - Additional config object
+     * @property {String} config.ulClass      - Add custom ul class
+     * @property {String} config.liClass      - Add custom li class
+     * @property {String} config.aClass       - Add custom a class
+     * @property {String} config.aActiveClass - 
      */
     function WizardSteps(pages, container, config) {
 
         this.config = config;
 
-        var ulClass = config.ulClass || '';
-        var liClass = config.liClass || '';
-        var aClass = config.aClass || '';
+        var ulClass = config.ulClass || '',
+            liClass = config.liClass || '',
+            aClass = config.aClass || '',
+            self = this,
+            li, a;
 
         this.el = document.createElement('ul');
         this.el.className += ' ' + ulClass;
-        var self = this,
-            li, a;
 
         // Populate status sections items
         pages.forEach(function (e, i) {

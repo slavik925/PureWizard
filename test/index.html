@@ -20,6 +20,7 @@
 
             <form class="pure-u-1-6 pure-form pure-form-stacked" id="wizardSimple">
                 <div class="pure-u-1" id="step1">
+                    <legend class="pwStepTitle">Step 1</legend>
                     <label for="fName">First Name</label>
                     <input class="pure-u-1" name="fName" value="" id="fName" type="text" placeholder="">
                     <label for="lName">Last Name</label>
@@ -30,6 +31,8 @@
 
 
                 <div class="pure-u-1" id="step2">
+                    <legend class="pwStepTitle">Step 2</legend>
+
                     <label for="sexf" class="pure-radio">
                     <input required id="sexf" type="radio" name="sex" value="option2">
                     Male
@@ -41,6 +44,7 @@
                 </div>
 
                 <div class="pure-u-1" id="step3">
+                    <legend class="pwStepTitle">Step 3</legend>
                     <label for="notes">Notes:</label>
                     <textarea class="pure-u-1" name="notes" id="notes" placeholder=""></textarea>
                     <label for="agree" class="pure-checkbox">
@@ -55,6 +59,12 @@
                     <button id="submitButton" class="pwFinish pure-button pure-button-primary">Finish</button>
                 </footer>
             </form>
+
+            <div class="pure-menu custom-restricted-width pure-u-1-4">
+                <section id="wizardStatusContainer">
+                </section>
+            </div>
+
         </div>
 
         <div id="mocha"></div>
@@ -65,7 +75,6 @@
 
         <script>
             mocha.setup('bdd');
-            document.getElementById('smallWizardOnComplete').style.display = 'none';
         </script>
         <script src="tests.js"></script>
         <script>
