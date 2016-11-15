@@ -5,292 +5,323 @@
     <meta charset="UTF-8">
     <title>Wizard Bootstrap</title>
     <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <style>
+        .has-error {
+            color: red;
+        }
+    </style>
 </head>
 
 <body>
-    <div class="container">
+<div class="container">
 
-        <div class="col-md-12">
-            <p class="row">
-                Simple form DEMO
-            </p>
-            <div id="smallWizardOnComplete">
-                <p>Submission complete!</p>
-                <button id="startSmallWizardAgain" class="btn btn-primary button-secondary button-success">Submit new</button>
-            </div>
-
-            <form class="form" id="wizardSimple">
-                <fieldset>
-                    <div class="form-group">
-                        <label for="fName">First Name</label>
-                        <input class="form-control" name="fName" value="" id="fName" type="text" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="lName">Last Name</label>
-                        <input class="form-control" name="lName" value="" id="lName" type="text" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="password">Password</label>
-                        <input class="form-control" name="password" value="" id="password" type="password" placeholder="">
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <div class="form-group">
-                        <label for="address">Address</label>
-                        <input class="form-control" name="address" value="" id="address" type="text" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="telephone1">Telephone</label>
-                        <input class="form-control" name="telephone" value="" id="telephone1" type="text" placeholder="">
-                    </div>
-                    <div class="form-group">
-                        <label for="email1">Email</label>
-                        <input class="form-control" name="email1" value="" id="email1" type="email" placeholder="">
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <div class="radio">
-                        <label for="sexf" class="pure-radio">
-                        <input id="sexf" type="radio" name="sex" value="option2">
-                        Male
-                    </label>
-                    </div>
-                    <div class="radio">
-                        <label for="sexm" class="pure-radio">
-                        <input id="sexm" type="radio" name="sex" value="option2">
-                        Female
-                    </label>
-                    </div>
-                </fieldset>
-
-                <fieldset>
-                    <div class="form-group">
-                        <label for="notes">Notes:</label>
-                        <textarea class="form-control" name="notes" id="notes" placeholder=""></textarea>
-                    </div>
-
-                    <div class="checkbox">
-                        <label for="agree" class="pure-checkbox">
-                        <input name="agree" id="agree" type="checkbox" required>
-                        I agree
-                    </label>
-                    </div>
-                </fieldset>
-
-                <footer>
-                    <button type="button" class="pwPrev btn btn-default">Prev</button>
-                    <button type="button" class="pwNext btn btn-primary">Next</button>
-                    <button type="submit" class="pwFinish btn btn-success">Finish</button>
-                </footer>
-            </form>
+    <div class="row">
+        <h5>Simple form DEMO</h5>
+        <div id="smallWizardOnComplete">
+            <p>Submission complete!</p>
+            <button id="startSmallWizardAgain" class="btn btn-primary button-secondary button-success">Submit new
+            </button>
         </div>
 
-        <div>
-            <p class="row">
-                Complex form DEMO:
-            </p>
+        <div class="row">
+            <div class="col-md-4">
+                <form class="form" id="wizardSimple">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="fName">First Name</label>
+                            <input class="form-control" name="fName" value="" id="fName" type="text" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="lName">Last Name</label>
+                            <input class="form-control" name="lName" value="" id="lName" type="text" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <input class="form-control" name="password" value="" id="password" type="password"
+                                   placeholder="">
+                        </div>
+                    </fieldset>
 
-            <form id="submitWizard" novalidate class="form">
-                <fieldset id="step1">
-                    <div class="row">
-                        <legend class="pwStepTitle">Step 1: Product Information</legend>
-                        <p>
-                            <em>
-                            Product Details - The following fields must include the description of your product exactly as
-                            you wish the final certification to read. Please verify the name before submission.
-                            </em>
-                        </p>
-                    </div>
-                    <div class="col-md-12">
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="address">Address</label>
+                            <input class="form-control" name="address" value="" id="address" type="text" placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="telephone1">Telephone</label>
+                            <input class="form-control" name="telephone" value="" id="telephone1" type="text"
+                                   placeholder="">
+                        </div>
+                        <div class="form-group">
+                            <label for="email1">Email</label>
+                            <input class="form-control" name="email1" value="" id="email1" type="email" placeholder="">
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <div class="radio">
+                            <label for="sexf" class="pure-radio">
+                                <input id="sexf" type="radio" name="sex" value="option2"> Male
+                            </label>
+                        </div>
+                        <div class="radio">
+                            <label for="sexm" class="pure-radio">
+                                <input id="sexm" type="radio" name="sex" value="option2"> Female
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <fieldset>
+                        <div class="form-group">
+                            <label for="notes">Notes:</label>
+                            <textarea class="form-control" name="notes" id="notes" placeholder=""></textarea>
+                        </div>
+
+                        <div class="checkbox">
+                            <label for="agree" class="pure-checkbox">
+                                <input name="agree" id="agree" type="checkbox" required>
+                                I agree
+                            </label>
+                        </div>
+                    </fieldset>
+
+                    <footer>
+                        <button type="button" class="pwPrev btn btn-default">Prev</button>
+                        <button type="button" class="pwNext btn btn-primary">Next</button>
+                        <button type="submit" class="pwFinish btn btn-success">Finish</button>
+                    </footer>
+                </form>
+            </div>
+        </div>
+
+
+    </div>
+
+    <div>
+        <div class="row">
+            <h5>Complex form DEMO:</h5>
+        </div>
+
+        <div class="row">
+            <div class="col-md-8">
+                <form id="submitWizard" novalidate class="form">
+                    <fieldset id="step1">
                         <div class="row">
-                            <div class="col-md-12">
-                                <label for="productName">Product Name <sup>*</sup><sup class="has-error has-error-label" id="productNameError"></sup></label>
-                                <input name="productName" data-error-msg="This field is required!" required class="form-control" value="" id="productName" type="text" placeholder="Product Name Here">
-                            </div>
+                            <legend class="pwStepTitle">Step 1: Product Information</legend>
+                            <p>
+                                <em>
+                                    Product Details - The following fields must include the description of your product
+                                    exactly as
+                                    you wish the final certification to read. Please verify the name before submission.
+                                </em>
+                            </p>
                         </div>
                         <div class="row">
-                            <div class="col-md-6">
-                                <label for="modelNumber">Model Number <sup>*</sup> <sup class="has-error has-error-label" id="productNameError"></sup></label>
-                                <input name="modelNumber" required data-error-msg="Should be between 0 and 100" class="form-control" id="modelNumber" type="number" max="100" min="0" />
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <label for="productName">Product Name <sup>*</sup><sup
+                                            class="has-error has-error-label" id="productNameError"></sup></label>
+                                    <input name="productName" data-error-msg="This field is required!" required
+                                           class="form-control" value="" id="productName" type="text"
+                                           placeholder="Product Name Here">
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <label for="modelNumber">Model Number <sup>*</sup> <sup
+                                            class="has-error has-error-label" id="productNameError"></sup></label>
+                                    <input name="modelNumber" required data-error-msg="Should be between 0 and 100"
+                                           class="form-control" id="modelNumber" type="number" max="100" min="0"/>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label for="url">Product URL</label>
+                                    <input name="url" class="form-control" id="url" type="url"/>
+                                </div>
                             </div>
 
-                            <div class="col-md-6">
-                                <label for="url">Product URL</label>
-                                <input name="url" class="form-control" id="url" type="url" />
-                            </div>
-                        </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="email">Email</label>
+                                    <input name="email" data-error-msg="Invalid email" class="form-control" id="email"
+                                           type="email"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="telephone">Telephone</label>
+                                    <input name="telephone" class="form-control" id="telephone" type="tel"/>
+                                </div>
 
-                        <div class="row">
-                            <div class="col-md-3">
-                                <label for="email">Email</label>
-                                <input name="email" data-error-msg="Invalid email" class="form-control" id="email" type="email" />
-                            </div>
-                            <div class="col-md-3">
-                                <label for="telephone">Telephone</label>
-                                <input name="telephone" class="form-control" id="telephone" type="tel" />
-                            </div>
-
-                            <div class="col-md-6">
-                                <div class="row form-horizontal">
-                                    <div class="col-md-6">
-                                        <label for="publishOnDate">Publish On Date</label>
-                                        <select id="publishOnDate" class="form-control">
-                                    <option>Now</option>
-                                    <option>Date</option>
-                                    <option>No</option>
-                                </select>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label for="publishOnDateValue">&nbsp;</label>
-                                        <input class="form-control" id="publishOnDateValue" name="publishOnDateValue" type="date" />
+                                <div class="col-md-6">
+                                    <div class="row form-horizontal">
+                                        <div class="col-md-6">
+                                            <label for="publishOnDate">Publish On Date</label>
+                                            <select id="publishOnDate" class="form-control">
+                                                <option>Now</option>
+                                                <option>Date</option>
+                                                <option>No</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label for="publishOnDateValue">&nbsp;</label>
+                                            <input class="form-control" id="publishOnDateValue"
+                                                   name="publishOnDateValue" type="date"/>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <label for="custom1">Custom 1</label>
+                                    <input name="custom1" class="form-control" id="custom1" type="email"/>
+                                </div>
+                                <div class="col-md-3">
+                                    <label for="custom2">Custom 2</label>
+                                    <input name="custom2" class="form-control" id="custom2" type="tel"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="otherNotes">Other notes</label>
+                                    <textarea id="otherNotes" name="otherNotes" class="form-control"></textarea>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <div class="col-md-6">
+                                    <label for="productLogo">Choose product logo</label>
+                                    <input class="form-control" name="productLogo" id="productLogo" type="file"/>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                    <fieldset id="step2">
+                        <div class="row">
+                            <legend class="pwStepTitle">Step 2: Product Category</legend>
+                            <p>Product Category - The following fields must include the description of your product
+                                exactly as you wish the final certification to read. Please verify the name before
+                                submission.</p>
                         </div>
                         <div class="row">
-                            <div class="col-md-3">
-                                <label for="custom1">Custom 1</label>
-                                <input name="custom1" class="form-control" id="custom1" type="email" />
-                            </div>
-                            <div class="col-md-3">
-                                <label for="custom2">Custom 2</label>
-                                <input name="custom2" class="form-control" id="custom2" type="tel" />
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <label for="productCategory">Product Category</label>
+                                    <select class="form-control" name="productCategory" id="productCategory" required>
+                                        <option value="">Select category</option>
+                                        <option>AL</option>
+                                        <option>CA</option>
+                                        <option>IL</option>
+                                    </select>
+                                </div>
+
                             </div>
                             <div class="col-md-6">
-                                <label for="otherNotes">Other notes</label>
-                                <textarea id="otherNotes" name="otherNotes" class="form-control"></textarea>
+                                <label for="productCategorySecond">Product Second Category</label>
+                                <select class="form-control" name="productCategorySecond" id="productCategorySecond">
+                                    <option value="-1">Select second category</option>
+                                    <option>AL</option>
+                                    <option>CA</option>
+                                    <option>IL</option>
+                                </select>
                             </div>
                         </div>
-                        <div class="row form-group">
-                            <div class="col-md-6">
-                                <label for="productLogo">Choose product logo</label>
-                                <input class="form-control" name="productLogo" id="productLogo" type="file" />
+                        <div class="row">
+                            <div class="checkbox">
+                                <label>
+                                    <input name="option1" id="option1" type="checkbox" required> Additional Options 1
+                                </label>
                             </div>
                         </div>
-                    </div>
-                </fieldset>
-                <fieldset id="step2">
-                    <div class="col-md-12">
-                        <legend class="pwStepTitle">Step 2: Product Category</legend>
-                        <p>Product Category - The following fields must include the description of your product exactly as you wish the final certification to read. Please verify the name before submission.</p>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <label for="productCategory">Product Category</label>
-                            <select class="form-control" name="productCategory" id="productCategory" required>
-                                <option value="">Select category</option>
-                                <option>AL</option>
-                                <option>CA</option>
-                                <option>IL</option>
-                            </select>
+                        <div class="row">
+                            <div class="checkbox">
+                                <label>
+                                    <input name="option2" id="option2" type="checkbox"/> Additional Options 2
+                                </label>
+                            </div>
                         </div>
-                        <div class="col-md-6">
-                            <label for="productCategorySecond">Product Second Category</label>
-                            <select class="form-control" name="productCategorySecond" id="productCategorySecond">
-                            <option value="-1">Select second category</option>
-                            <option>AL</option>
-                            <option>CA</option>
-                            <option>IL</option>
-                        </select>
+
+                    </fieldset>
+                    <fieldset id="step3">
+                        <div class="row">
+                            <legend class="pwStepTitle">Step 3: Product Options</legend>
                         </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 checkbox">
-                            <label>
-                                <input name="option1" id="option1" type="checkbox" required> Additional Options 1
-                              </label>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-12 checkbox">
-                            <label>
-                                <input name="option2" id="option2" type="checkbox"/> Additional Options 2
+                        <div class="row">
+                            <label for="option-two" class="pure-radio">
+                                <input id="option-two" type="radio" name="optionsRadios" value="option1" required>
+                                Here's a radio button. You can choose this one..
                             </label>
                         </div>
-                    </div>
 
-                    </label>
+                        <div class="row">
+                            <label for="option-three" class="pure-radio">
+                                <input id="option-three" type="radio" name="optionsRadios" value="option2" required>
+                                ..Or this one!
+                            </label>
+                        </div>
+                        <div class="row">
+                            <label for="cb" class="pure-checkbox">
+                                <input id="cb" required type="checkbox"> I've read the terms and conditions
+                            </label>
+                        </div>
 
-                </fieldset>
-                <fieldset id="step3">
-                    <legend class="pwStepTitle">Step 3: Product Options</legend>
-
-                    <label for="option-two" class="pure-radio">
-                        <input id="option-two" type="radio" name="optionsRadios" value="option1" required>
-                        Here's a radio button. You can choose this one..
-                    </label>
-
-                    <label for="option-three" class="pure-radio">
-                        <input id="option-three" type="radio" name="optionsRadios" value="option2" required>
-                        ..Or this one!
-                    </label>
-
-                    <label for="cb" class="pure-checkbox">
-                        <input id="cb" required type="checkbox"> I've read the terms and conditions
-                    </label>
-
-                </fieldset>
-                <footer class="col-md-12">
-                    <button type="button" class="btn btn-default pwPrev">Prev</button>
-                    <button type="button" class="btn btn-primary pwNext">Next</button>
-                    <button type="submit" class="btn btn-success pwFinish">Finish</button>
-                </footer>
-            </form>
-            <div class="pure-menu custom-restricted-width pure-u-1-4 ">
+                    </fieldset>
+                    <footer class="row">
+                        <button type="button" class="btn btn-default pwPrev">Prev</button>
+                        <button type="button" class="btn btn-primary pwNext">Next</button>
+                        <button type="submit" class="btn btn-success pwFinish">Finish</button>
+                    </footer>
+                </form>
+            </div>
+            <div class="col-md-4">
                 <span class="pure-menu-heading ">Wizard Steps</span>
                 <section id="wizardStatusContainer">
                 </section>
             </div>
         </div>
-
     </div>
-    <script src="../js/pureWizard.js "></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
 
-            //TODO: prepare for most popular css frameworks
-            var WizardStatusContainerConfig = {
-                containerId: 'wizardStatusContainer',
-                ulClass: 'pure-menu-list',
-                liClass: 'pure-menu-item',
-                aClass: 'pure-menu-link',
-                aActiveClass: 'current-step'
-            };
+</div>
+<script src="../js/pureWizard.js "></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
 
-            var wizardConf = {
-                wizardNodeId: 'submitWizard',
-                statusContainerCfg: WizardStatusContainerConfig,
-                enableHistory: false,
-                errorClass: 'has-error'
-            };
+        //TODO: prepare for most popular css frameworks
+        var WizardStatusContainerConfig = {
+            containerId: 'wizardStatusContainer',
+            ulClass: 'pure-menu-list',
+            liClass: 'pure-menu-item',
+            aClass: 'pure-menu-link',
+            aActiveClass: 'current-step'
+        };
 
-            var wizard = new PureWizard(wizardConf);
+        var wizardConf = {
+            wizardNodeId: 'submitWizard',
+            statusContainerCfg: WizardStatusContainerConfig,
+            enableHistory: false,
+            errorClass: 'has-error'
+        };
 
-            wizard.onPageChanged(function(e) {
-                console.log('Changed page from ' + e.detail.pageBefore + ' to ' + e.detail.pageAfter);
-            });
+        var wizard = new PureWizard(wizardConf);
 
-            var wizardSimple = new PureWizard({
-                wizardNodeId: 'wizardSimple',
-                hideNextPrevButtons: true,
-                enableHistory: false
-            });
-
-            wizardSimple.onSubmit(function(e) {
-                document.forms['wizardSimple'].reset();
-                document.getElementById('wizardSimple').style.display = 'none';
-                document.getElementById('smallWizardOnComplete').style.display = 'block';
-            });
-
-            document.getElementById('smallWizardOnComplete').style.display = 'none';
-            document.getElementById('startSmallWizardAgain').addEventListener('click', function(e) {
-                document.getElementById('smallWizardOnComplete').style.display = 'none';
-                document.getElementById('wizardSimple').style.display = 'block';
-            });
+        wizard.onPageChanged(function (e) {
+            console.log('Changed page from ' + e.detail.pageBefore + ' to ' + e.detail.pageAfter);
         });
-    </script>
+
+        var wizardSimple = new PureWizard({
+            wizardNodeId: 'wizardSimple',
+            hideNextPrevButtons: true,
+            enableHistory: false
+        });
+
+        wizardSimple.onSubmit(function (e) {
+            document.forms['wizardSimple'].reset();
+            document.getElementById('wizardSimple').style.display = 'none';
+            document.getElementById('smallWizardOnComplete').style.display = 'block';
+        });
+
+        document.getElementById('smallWizardOnComplete').style.display = 'none';
+        document.getElementById('startSmallWizardAgain').addEventListener('click', function (e) {
+            document.getElementById('smallWizardOnComplete').style.display = 'none';
+            document.getElementById('wizardSimple').style.display = 'block';
+        });
+    });
+</script>
 </body>
 
 </html>
