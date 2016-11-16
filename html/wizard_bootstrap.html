@@ -300,7 +300,7 @@
         var wizard = new PureWizard(wizardConf);
 
         wizard.onPageChanged(function (e) {
-            console.log('Changed page from ' + e.detail.pageBefore + ' to ' + e.detail.pageAfter);
+            console.log('Changed page from ' + e.detail.previousPage + ' to ' + e.detail.currentPage);
         });
 
         var wizardSimple = new PureWizard({

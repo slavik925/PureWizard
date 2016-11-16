@@ -281,7 +281,7 @@
             var wizard = new PureWizard(wizardConf);
 
             wizard.onPageChanged(function(e) {
-                console.log('Changed page from ' + e.detail.oldPage + ' to ' + e.detail.newPage);
+                console.log('Changed page from ' + e.detail.previousPage + ' to ' + e.detail.currentPage);
             });
 
             var wizardSimple = new PureWizard({
