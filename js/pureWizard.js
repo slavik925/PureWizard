@@ -159,11 +159,12 @@
             self.statusSection = new WizardSteps( self.pages, statusSectionContainer, self.config.statusContainerCfg );
 
             statusSectionContainer.addEventListener( 'click', function( e ) {
-                e.preventDefault();
                 var link = e.target;
                 if( link.tagName.toLocaleLowerCase() === 'a' ) {
                     var pageNumber = Number( link.attributes['data-step'].value );
-                    self.goToPage( pageNumber );
+                    if ( !self.goToPage( pageNumber ) ) {
+		    	        self.current.toggleErrors();	
+		            }
                 }
             } );
         }

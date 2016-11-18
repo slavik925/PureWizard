@@ -9,6 +9,10 @@
         .has-error {
             color: red;
         }
+
+		.pwNavActive {
+			font-weight: bold;
+		}
     </style>
 </head>
 
@@ -142,7 +146,7 @@
 
                             <div class="row">
                                 <div class="col-md-3">
-                                    <label for="email">Email</label>
+									<label for="email">Email <sup id="emailError"></sup></label>
                                     <input name="email" data-error-msg="Invalid email" class="form-control" id="email"
                                            type="email"/>
                                 </div>
@@ -284,10 +288,10 @@
         //TODO: prepare for most popular css frameworks
         var WizardStatusContainerConfig = {
             containerId: 'wizardStatusContainer',
-            ulClass: 'pure-menu-list',
-            liClass: 'pure-menu-item',
-            aClass: 'pure-menu-link',
-            aActiveClass: 'current-step'
+            ulClass: '',
+            liClass: '',
+            aClass: '',
+            aActiveClass: 'pwNavActive'
         };
 
         var wizardConf = {
