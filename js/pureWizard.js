@@ -36,7 +36,7 @@
      */
     var addClass = function( elem, className ) {
         if( className ) {
-            elem.classList ? elem.classList.add( className ) : hasClass( className ) || (elem.className = elem.className.trim() + " " + className)
+            elem.classList ? elem.classList.add( className ) : hasClass( className ) || (elem.className = elem.className.trim() + ' ' + className)
         }
     };
 
