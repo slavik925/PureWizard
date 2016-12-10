@@ -1,3 +1,4 @@
+/* globals define, module, exports */
 (function( root, factory ) {
 
     'use strict';
@@ -112,11 +113,11 @@
 
         self.goToPage( this.config.startPage, true );
 
-        this.buttons.next.addEventListener( 'click', function( e ) {
+        this.buttons.next.addEventListener( 'click', function() {
             PureWizard.prototype.next.call( self );
         } );
 
-        this.buttons.prev.addEventListener( 'click', function( e ) {
+        this.buttons.prev.addEventListener( 'click', function() {
             PureWizard.prototype.prev.call( self );
         } );
 
@@ -135,7 +136,7 @@
             } );
         }
 
-        this.form.addEventListener( 'reset', function( e ) {
+        this.form.addEventListener( 'reset', function() {
             self.goToPage( 0 );
         } );
 
@@ -162,9 +163,9 @@
                 var link = e.target;
                 if( link.tagName.toLocaleLowerCase() === 'a' ) {
                     var pageNumber = Number( link.attributes['data-step'].value );
-                    if ( !self.goToPage( pageNumber ) ) {
-		    	        self.current.toggleErrors();	
-		            }
+                    if( !self.goToPage( pageNumber ) ) {
+                        self.current.toggleErrors();
+                    }
                 }
             } );
         }
@@ -184,7 +185,7 @@
 
     /**
      *  @function
-     *  Move to previouse page if present
+     *  Move to previous page if present
      */
     PureWizard.prototype.prev = function pureWizard_prev() {
         if( this.current.getPrev() ) {
@@ -198,7 +199,7 @@
      * Get current page
      * @function
      *
-     * @return {PureWizadPage}
+     * @returns {PureWizadPage}
      */
     PureWizard.prototype.getCurrentPage = function() {
         return this.current;
@@ -208,7 +209,7 @@
      * Get current page index, starts from 0
      * @function
      *
-     * @return {Number}
+     * @returns {Number}
      */
     PureWizard.prototype.getCurrentPageNumber = function() {
         return this.currentIndex;
@@ -240,10 +241,10 @@
      * Go to page
      * @function
      * @param {PureWizardPage} page
-     * @param {Number} page              - page number youwhant want to navigate, starts from 0
+     * @param {Number} page              - page number to navigate, starts from 0
      * @param {Boolean} [skipValidation] - skip validation when switching the page
      *
-     * @return {Boolean}
+     * @returns {Boolean}
      *
      * @fires PureWizard#onPWPageChanged
      */
@@ -272,8 +273,6 @@
                 }
             }
 
-            var indexBefore = this.currentIndex;
-
             this.current.hide();
             this.current = page;
             this.current.show();
@@ -291,7 +290,7 @@
              *
              * @type {Object}
              * @property {Object} pwDetails
-             * @property {Number} previousePage
+             * @property {Number} previousPage
              * @property {Number} currentPage
              */
             var event = new CustomEvent( 'onPWPageChanged', {
@@ -344,8 +343,8 @@
      * @constructor
      *
      * @param {Object} config
-     * @property {Sting} [config.hideClass='']   - Css class used to hide wizard pages
-     * @property {String} [config.errorClass=''] - Css class to Highlight field with errors, if no
+     * @property {String} [config.hideClass='']   - Css class used to hide wizard pages
+     * @property {String} [config.errorClass='']  - Css class to Highlight field with errors, if no
      * @param {Node} container
      * @param {PureWizardPage} [prev]
      * @param {PureWizardPage} [next]
@@ -361,7 +360,7 @@
      * Return invalid elements from the page
      * @function
      *
-     * @return {NodeList}
+     * @returns {NodeList}
      */
     PureWizardPage.prototype.getInvalidElements = function PureWizardPage_getInvalidElements() {
         return this.el.querySelectorAll( ':invalid' );
@@ -371,7 +370,7 @@
      * Check if the page is valid
      * @function
      *
-     * @return {Boolean}
+     * @returns {Boolean}
      */
     PureWizardPage.prototype.isValid = function PureWizardPage_isValid() {
         return this.getInvalidElements().length === 0;
@@ -381,7 +380,7 @@
      * Toogle the validation messages and error class
      * @functionf
      *
-     * @return {Boolean}
+     * @returns {Boolean}
      */
     PureWizardPage.prototype.toggleErrors = function PureWizardPage_toggleErrors() {
         var
@@ -443,7 +442,7 @@
      * Return the next page
      * @function
      *
-     * @return {PureWizardPage}
+     * @returns {PureWizardPage}
      */
     PureWizardPage.prototype.getNext = function() {
         return this.next;
@@ -453,7 +452,7 @@
      * Return the previouse page
      * @function
      *
-     * @return {PureWizardPage}
+     * @returns {PureWizardPage}
      */
     PureWizardPage.prototype.getPrev = function() {
         return this.prev;
