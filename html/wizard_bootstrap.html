@@ -10,9 +10,9 @@
             color: red;
         }
 
-		.pwNavActive {
-			font-weight: bold;
-		}
+        .pwNavActive {
+            font-weight: bold;
+        }
     </style>
 </head>
 
@@ -133,7 +133,7 @@
                             <div class="row">
                                 <div class="col-md-6">
                                     <label for="modelNumber">Model Number <sup>*</sup> <sup
-                                            class="has-error has-error-label" id="productNameError"></sup></label>
+                                            class="has-error has-error-label" id="modelNumberError"></sup></label>
                                     <input name="modelNumber" required data-error-msg="Should be between 0 and 100"
                                            class="form-control" id="modelNumber" type="number" max="100" min="0"/>
                                 </div>
@@ -146,7 +146,7 @@
 
                             <div class="row">
                                 <div class="col-md-3">
-									<label for="email">Email <sup id="emailError"></sup></label>
+                                    <label for="email">Email <sup id="emailError"></sup></label>
                                     <input name="email" data-error-msg="Invalid email" class="form-control" id="email"
                                            type="email"/>
                                 </div>
@@ -227,14 +227,14 @@
                         </div>
                         <div class="row">
                             <div class="checkbox">
-                                <label>
+                                <label for="option1">
                                     <input name="option1" id="option1" type="checkbox" required> Additional Options 1
                                 </label>
                             </div>
                         </div>
                         <div class="row">
                             <div class="checkbox">
-                                <label>
+                                <label for="option2">
                                     <input name="option2" id="option2" type="checkbox"/> Additional Options 2
                                 </label>
                             </div>
@@ -283,7 +283,7 @@
 </div>
 <script src="../js/pureWizard.js "></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener( 'DOMContentLoaded', function() {
 
         //TODO: prepare for most popular css frameworks
         var WizardStatusContainerConfig = {
@@ -301,30 +301,30 @@
             errorClass: 'has-error'
         };
 
-        var wizard = new PureWizard(wizardConf);
+        var wizard = new PureWizard( wizardConf );
 
-        wizard.onPageChanged(function (e) {
-            console.log('Changed page from ' + e.detail.previousPage + ' to ' + e.detail.currentPage);
-        });
+        wizard.onPageChanged( function( e ) {
+            console.log( 'Changed page from ' + e.detail.previousPage + ' to ' + e.detail.currentPage );
+        } );
 
-        var wizardSimple = new PureWizard({
+        var wizardSimple = new PureWizard( {
             wizardNodeId: 'wizardSimple',
             hideNextPrevButtons: true,
             enableHistory: false
-        });
+        } );
 
-        wizardSimple.onSubmit(function (e) {
+        wizardSimple.onSubmit( function( e ) {
             document.forms['wizardSimple'].reset();
-            document.getElementById('wizardSimple').style.display = 'none';
-            document.getElementById('smallWizardOnComplete').style.display = 'block';
-        });
+            document.getElementById( 'wizardSimple' ).style.display = 'none';
+            document.getElementById( 'smallWizardOnComplete' ).style.display = 'block';
+        } );
 
-        document.getElementById('smallWizardOnComplete').style.display = 'none';
-        document.getElementById('startSmallWizardAgain').addEventListener('click', function (e) {
-            document.getElementById('smallWizardOnComplete').style.display = 'none';
-            document.getElementById('wizardSimple').style.display = 'block';
-        });
-    });
+        document.getElementById( 'smallWizardOnComplete' ).style.display = 'none';
+        document.getElementById( 'startSmallWizardAgain' ).addEventListener( 'click', function( e ) {
+            document.getElementById( 'smallWizardOnComplete' ).style.display = 'none';
+            document.getElementById( 'wizardSimple' ).style.display = 'block';
+        } );
+    } );
 </script>
 </body>
 

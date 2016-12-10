@@ -19,6 +19,38 @@
 
     'use strict';
 
+    /**
+     * Check if class is present
+     * @param elem
+     * @param className
+     * @returns {boolean}
+     */
+    var hasClass = function( elem, className ) {
+        return elem.classList ? elem.classList.contains( className ) : !!elem.className.match( new RegExp( '(\\s|^)' + className + '(\\s|$)' ) );
+    };
+
+    /**
+     *  Add class to element
+     * @param elem
+     * @param className
+     */
+    var addClass = function( elem, className ) {
+        if( className ) {
+            elem.classList ? elem.classList.add( className ) : hasClass( className ) || (elem.className = elem.className.trim() + " " + className)
+        }
+    };
+
+    /**
+     * Remove class from element
+     * @param elem
+     * @param className
+     */
+    var removeClass = function( elem, className ) {
+        if( className ) {
+            elem.classList ? elem.classList.remove( className ) : hasClass( className ) && (elem.className = elem.className.replace( new RegExp( "(^|\\s)" + className.split( " " ).join( "|" ) + "(\\s|$)", "gi" ), " " ))
+        }
+    };
+
     var defaultConfig = {
         errorClass: 'has-error',
         statusContainerCfg: {},
@@ -162,8 +194,9 @@
             statusSectionContainer.addEventListener( 'click', function( e ) {
                 var link = e.target;
                 if( link.tagName.toLocaleLowerCase() === 'a' ) {
-                    var pageNumber = Number( link.attributes['data-step'].value );
-                    if( !self.goToPage( pageNumber ) ) {
+                    var pageNumber = Number( link.attributes['data-step'].value ),
+                        index = self.currentIndex;
+                    if( !self.goToPage( pageNumber ) || index > pageNumber ) {
                         self.current.toggleErrors();
                     }
                 }
@@ -189,9 +222,8 @@
      */
     PureWizard.prototype.prev = function pureWizard_prev() {
         if( this.current.getPrev() ) {
-            if( !this.goToPage( this.currentIndex - 1 ) ) {
-                this.current.toggleErrors();
-            }
+            this.goToPage( this.currentIndex - 1 );
+            this.current.toggleErrors();
         }
     };
 
@@ -377,8 +409,8 @@
     };
 
     /**
-     * Toogle the validation messages and error class
-     * @functionf
+     * Toggle the validation messages and apply error class
+     * @function
      *
      * @returns {Boolean}
      */
@@ -391,11 +423,11 @@
         for( i = 0; i < invalidInputs.length; i++ ) {
             invalidInputLabel = this.el.querySelector( 'label[for="' + invalidInputs[i].id + '"]' );
 
-            if( invalidInputs[i].className.indexOf( this.config.errorClass ) === -1 ) {
+            if( !hasClass( invalidInputs[i], this.config.errorClass ) ) {
 
-                invalidInputs[i].className += ' ' + this.config.errorClass;
-                if( invalidInputLabel && invalidInputLabel.className.indexOf( this.config.errorClass ) === -1 ) {
-                    invalidInputLabel.className += ' ' + this.config.errorClass;
+                addClass( invalidInputs[i], this.config.errorClass );
+                if( invalidInputLabel && !hasClass( invalidInputLabel, this.config.errorClass ) ) {
+                    addClass( invalidInputLabel, this.config.errorClass );
                 }
                 // If error message and error container exists display error
                 errorMsg = invalidInputs[i].getAttribute( 'data-error-msg' );
@@ -411,13 +443,12 @@
         var cssClass = this.config.errorClass ? '.' + this.config.errorClass : '';
         var validElements = this.el.querySelectorAll( cssClass + ':valid' );
         for( i = 0; i < validElements.length; i++ ) {
-            validElements[i].className = validElements[i].className.replace( this.config.errorClass, '' );
-
+            removeClass( validElements[i], this.config.errorClass );
             invalidInputLabel = this.el.querySelector( 'label[for="' + validElements[i].id + '"]' );
             errorMsgContainer = document.getElementById( validElements[i].id + 'Error' );
 
             if( invalidInputLabel ) {
-                invalidInputLabel.className = invalidInputLabel.className.replace( this.config.errorClass, '' );
+                removeClass( invalidInputLabel, this.config.errorClass );
             }
             if( errorMsgContainer ) {
                 errorMsgContainer.innerHTML = '';
@@ -476,7 +507,7 @@
      */
     PureWizardPage.prototype.hide = function() {
         if( this.config.hideClass ) {
-            this.el.className += ' ' + this.config.hideClass;
+            addClass( this.el, this.config.hideClass );
         } else {
             this.el.style.display = 'none';
         }
@@ -506,17 +537,17 @@
             li, a;
 
         this.el = document.createElement( 'ul' );
-        this.el.className += ' ' + ulClass;
+        addClass( this.el, ulClass );
 
         // Populate status sections items
         pages.forEach( function( e, i ) {
             li = document.createElement( 'li' );
             a = document.createElement( 'a' );
-            li.className += ' ' + liClass;
+            addClass( li, liClass );
             a.setAttribute( 'href', '#' );
             a.setAttribute( 'data-step', i.toString() );
             a.appendChild( document.createTextNode( e.getTitle() ) );
-            a.className += ' ' + aClass;
+            addClass( a, aClass );
             li.appendChild( a );
             self.el.appendChild( li );
         } );
@@ -531,9 +562,9 @@
     WizardSteps.prototype.setStep = function( stepNumber ) {
         var currentActive = this.el.querySelector( '.' + this.config.aActiveClass );
         if( currentActive ) {
-            currentActive.className = currentActive.className.replace( this.config.aActiveClass, '' );
+            removeClass( currentActive, this.config.aActiveClass );
         }
-        this.el.children[stepNumber].className += ' ' + this.config.aActiveClass;
+        addClass( this.el.children[stepNumber], this.config.aActiveClass );
     };
 
     return PureWizard;
