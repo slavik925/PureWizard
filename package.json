@@ -1,0 +1,13 @@
+{
+  "name": "PureWizard",
+  "version": "1.0.0",
+  "author": "Vyacheslav Horodovych",
+  "scripts": {
+    "dist": "uglifyjs js/pureWizard.js -o dist/pureWizard.js --compress -m --screw-ie8"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^3.1.2",
+    "uglify-js": "^2.7.5"
+  }
+}
