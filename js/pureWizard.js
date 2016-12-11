@@ -25,33 +25,34 @@
      * @param className
      * @returns {boolean}
      */
-    var hasClass = function( elem, className ) {
+    function hasClass( elem, className ) {
         return elem.classList ? elem.classList.contains( className ) : !!elem.className.match( new RegExp( '(\\s|^)' + className + '(\\s|$)' ) );
-    };
+    }
 
     /**
      *  Add class to element
      * @param elem
      * @param className
      */
-    var addClass = function( elem, className ) {
+    function addClass( elem, className ) {
         if( className ) {
             elem.classList ? elem.classList.add( className ) : hasClass( className ) || (elem.className = elem.className.trim() + ' ' + className)
         }
-    };
+    }
 
     /**
      * Remove class from element
      * @param elem
      * @param className
      */
-    var removeClass = function( elem, className ) {
+    function removeClass( elem, className ) {
         if( className ) {
             elem.classList ? elem.classList.remove( className ) : hasClass( className ) && (elem.className = elem.className.replace( new RegExp( "(^|\\s)" + className.split( " " ).join( "|" ) + "(\\s|$)", "gi" ), " " ))
         }
-    };
+    }
 
     var defaultConfig = {
+        wizardNodeId: '',
         errorClass: 'has-error',
         statusContainerCfg: {},
         stepsSplitCssQuery: 'fieldset',
@@ -64,18 +65,18 @@
      * @class
      * @constructor
      *
-     * @param    {Object}  config                                - The defaults values for wizard config
-     * @property {String}  config.wizardNodeId                   - Id of main section that contains wizard
-     * @property {String}  [config.errorClass='has-error']       - Class name that would apply on field error
-     * @property {String}  [config.stepsSplitCssQuery='fieldset'] - Specify the css query that will be apply to wizard container and split into steps
-     * @property {Boolean} [config.hideNextPrevButtons='true']  - If true when hide buttons if no steps back/forward and if false disables them
-     * @property {Object}  [config.statusContainerCfg='{}']      - Allo to configure a status panel
-     * @property {Number}  [config.startPage='0']               - Open form on the particular page number, starts from 0
+     * @param    {Object}  config                                   - The defaults values for wizard config
+     * @property {String}  config.wizardNodeId                      - Id of main section that contains wizard
+     * @property {String}  [config.errorClass='has-error']          - Class name that would apply on field error
+     * @property {String}  [config.stepsSplitCssQuery='fieldset']   - Specify the css query that will be apply to wizard container and split into steps
+     * @property {Boolean} [config.hideNextPrevButtons='true']      - If true when hide buttons if no steps back/forward and if false disables them
+     * @property {Object}  [config.statusContainerCfg='{}']         - Allow to configure a status panel
+     * @property {Number}  [config.startPage='0']                   - Open form on the particular page number, starts from 0,
      *
      * The wizard uses main three buttons to operate that should be with following css classes:
      *   next button          - 'pwNext'
-     *   previouse button     - 'pwPrev'
-     *   final/submit button   - 'pwFinish'
+     *   previous button      - 'pwPrev'
+     *   final/submit button  - 'pwFinish'
      *
      */
     function PureWizard( config ) {
@@ -87,13 +88,9 @@
         // External config
         this.config = {};
 
-        this.config.wizardNodeId = config.wizardNodeId;
-        this.config.enableHistory = config.enableHistory || defaultConfig.enableHistory;
-        this.config.errorClass = config.errorClass || defaultConfig.errorClass;
-        this.config.stepsSplitCssQuery = config.stepsSplitCssQuery || defaultConfig.stepsSplitCssQuery;
-        this.config.hideNextPrevButtons = config.hideNextPrevButtons || defaultConfig.hideNextPrevButtons;
-        this.config.startPage = config.startPage || defaultConfig.startPage;
-        this.config.statusContainerCfg = config.statusContainerCfg || defaultConfig.statusContainerCfg;
+        Object.keys( defaultConfig ).forEach( function( configKey ) {
+            this.config[configKey] = config.hasOwnProperty( configKey ) ? config[configKey] : defaultConfig[configKey];
+        }, this );
 
         // Internal config
         this.pages = [];
@@ -272,8 +269,7 @@
     /**
      * Go to page
      * @function
-     * @param {PureWizardPage} page
-     * @param {Number} page              - page number to navigate, starts from 0
+     * @param {Number} pageNumber        - page number to navigate, starts from 0
      * @param {Boolean} [skipValidation] - skip validation when switching the page
      *
      * @returns {Boolean}
@@ -297,7 +293,7 @@
                 // If goes for example from page 1 to 3 and page 2 is invalid
                 // validate through page 2, but page 3 can be invalid
                 if( this.currentIndex < pageNumber && this.currentIndex + 1 !== pageNumber ) {
-                    if( this.pages.filter( function( p, i, arr ) {
+                    if( this.pages.filter( function( p, i ) {
                             return !p.isValid() && (i !== pageNumber);
                         } ).length > 0 ) {
                         return false;
