@@ -36,7 +36,7 @@
      */
     function addClass( elem, className ) {
         if( className ) {
-            elem.classList ? elem.classList.add( className ) : hasClass( className ) || (elem.className = elem.className.trim() + ' ' + className)
+            elem.classList ? elem.classList.add( className ) : hasClass( className ) || (elem.className = elem.className.trim() + ' ' + className);
         }
     }
 
@@ -47,7 +47,7 @@
      */
     function removeClass( elem, className ) {
         if( className ) {
-            elem.classList ? elem.classList.remove( className ) : hasClass( className ) && (elem.className = elem.className.replace( new RegExp( "(^|\\s)" + className.split( " " ).join( "|" ) + "(\\s|$)", "gi" ), " " ))
+            elem.classList ? elem.classList.remove( className ) : hasClass( className ) && (elem.className = elem.className.replace( new RegExp( "(^|\\s)" + className.split( " " ).join( "|" ) + "(\\s|$)", "gi" ), " " ));
         }
     }
 
@@ -170,7 +170,7 @@
         } );
 
         function divideIntoPages() {
-            for( i = 0; i < fieldsets.length; i++ ) {
+            for( i = 0; i < fieldsets.length; i+=1 ) {
                 node = fieldsets[i];
                 if( self.pages.length === 0 ) {
                     self.pages.push( new PureWizardPage( self.config, node ) );
