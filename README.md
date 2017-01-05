@@ -18,6 +18,8 @@ Here is the list of the main features:
 
 [Bootstrap version](https://slavik925.github.io/PureWizard/wizard_bootstrap)
 
+[Documentation](https://slavik925.github.io/PureWizard/api)
+
 #### Browser support:
 
 * Chrome
