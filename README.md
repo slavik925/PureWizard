@@ -14,7 +14,7 @@ Here is the list of the main features:
 
 ### Demo and Documentation
 
-PureCSS version, Bootstrap version
+[PureCSS version](https://slavik925.github.io/PureWizard/)
 
 #### Browser support:
 
