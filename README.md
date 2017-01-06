@@ -14,11 +14,11 @@ Here is the list of the main features:
 
 ### Demo and Documentation
 
-[PureCSS version](https://slavik925.github.io/PureWizard/)
+[PureCSS version](https://slavik925.github.io/PureWizard/html/wizard)
 
-[Bootstrap version](https://slavik925.github.io/PureWizard/wizard_bootstrap)
+[Bootstrap version](https://slavik925.github.io/PureWizard/html/wizard_bootstrap)
 
-[Documentation](https://slavik925.github.io/PureWizard/api)
+[Documentation](https://slavik925.github.io/PureWizard/)
 
 #### Browser support:
 
