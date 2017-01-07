@@ -278,7 +278,7 @@
      *
      * @returns {Boolean}
      *
-     * @fires PureWizard#onPWPageChanged
+     * @fires onPWPageChanged
      */
     PureWizard.prototype.goToPage = function PureWizard_goToPage( pageNumber, skipValidation ) {
 
@@ -318,10 +318,12 @@
             this.toggleButtons();
 
             /**
-             * @event PureWizard#onPWPageChanged
+             * PureWizard page changed
+             * 
+             * @event onPWPageChanged
              *
              * @type {Object}
-             * @property {Object} pwDetails
+             * @param    {Object} detail
              * @property {Number} previousPage
              * @property {Number} currentPage
              */

@@ -5,7 +5,7 @@
   "scripts": {
     "dist": "uglifyjs js/pureWizard.js -o dist/pureWizard.js --compress -m --screw-ie8",
     "doc": "jsdoc js/pureWizard.js README.md -d docs",
-    "deploy": "copyfiles css/*.css js/*.js html/*.html docs"
+    "copyhtml": "copyfiles css/*.css js/*.js html/*.html docs"
   },
   "devDependencies": {
     "chai": "^3.5.0",
